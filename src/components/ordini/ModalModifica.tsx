@@ -1,7 +1,6 @@
-
 import { format, parseISO } from 'date-fns';
 import { Ordine } from '@/types/ordine';
-import { DatiProiezione } from '@/types/proiezione';
+import { Proiezione } from '@/types/proiezione';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -24,7 +23,7 @@ interface PropsDialogoProiezione {
     isOpen: boolean;
     onClose: () => void;
     ordineSelezionato: Ordine | null;
-    proiezioniDisponibili: DatiProiezione[];           // Lista delle proiezioni che l'utente può scegliere
+    proiezioniDisponibili: Proiezione[];           // Lista delle proiezioni che l'utente può scegliere
     proiezioneTemporanea: string;                      // ID della proiezione temporaneamente selezionata
     onCambioProiezione: (valore: string) => void;
     onConferma: () => Promise<void>;

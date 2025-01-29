@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface LoginFormInputs {
     email: string;      // Email dell'utente
     password: string;   // Password dell'utente

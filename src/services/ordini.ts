@@ -1,4 +1,4 @@
-import { Order, OrderUpdateRequest, SeatChangeRequest } from '@/types/ordine';
+import { Ordine, RichiestaAggiornamentoOrdine, RichiestaCambioPosto } from '@/types/ordine';
 
 const BASE_URL = 'http://localhost:5000/api/ordini';
 
@@ -6,8 +6,8 @@ export const ordineAPI = {
     //TODO IMPLEMENTARE (DA BACKEND E RICHIAMARE QUI) UN ENDPOINT PER ELIMINARE DEI POSTI O AGGIUNGERNE.
 
     //funzione che effettua il fetch degli ordini dell'utente
-    async fetchOrdini(): Promise<Order[]> {
-        const response = await fetch(`${BASE_URL}/ordini`, {
+    async fetchOrdini(): Promise<Ordine[]> {
+        const response = await fetch(`${BASE_URL}`, {
             credentials: 'include'
         });
 
@@ -32,7 +32,7 @@ export const ordineAPI = {
     },
 
     //funzione per cambiare sia la data della proiezione sia il posto, perché se si cambia data bisogna scegliere per forza un nuovo posto.
-    async cambiaDataProiezione(data: OrderUpdateRequest): Promise<void> {
+    async cambiaDataProiezione(data: RichiestaAggiornamentoOrdine): Promise<void> {
         const response = await fetch(`${BASE_URL}/change-projection-and-seats`, {
             method: 'POST',
             headers: {
@@ -48,7 +48,7 @@ export const ordineAPI = {
     },
 
     //funziona invece per cambiare solo il posto
-    async cambiaPosto(data: SeatChangeRequest): Promise<void> {
+    async cambiaPosto(data: RichiestaCambioPosto): Promise<void> {
         const response = await fetch(`${BASE_URL}/change-seats`, {
             method: 'POST',
             headers: {

@@ -1,4 +1,3 @@
-// filmHero.tsx
 import { Badge } from "@/components/ui/badge"; // Componente per etichette (badge)
 import { Button } from "@/components/ui/button"; // Componente per bottoni
 import { Film } from "@/types/film"; // Tipo personalizzato per i film
@@ -17,7 +16,7 @@ export const Hero = ({ film, onAcquista }: HeroProps) => {
                 src={film.url_copertina}
                 alt={film.titolo}
                 className="w-full h-full object-cover"
-            />Props
+            />
 
             {/* Filtro gradient usato anche nella hero homepage sull'immagine */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />

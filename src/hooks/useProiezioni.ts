@@ -1,7 +1,7 @@
 // Importazione delle dipendenze necessarie
 import { useState, useCallback, useRef } from 'react'
 import {proiezioneAPI} from "@/services/proiezioni.ts";
-import {raggruppaDate} from "@/utils/dateFormatter.ts";
+import {raggruppaDate} from "@/utils/utilsDate.ts";
 import {ProiezioniPerFilm} from "@/types/proiezione.ts";
 
 // Hook personalizzato per gestire gli orari delle proiezioni

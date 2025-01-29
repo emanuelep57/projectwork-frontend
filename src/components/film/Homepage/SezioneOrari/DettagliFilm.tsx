@@ -1,4 +1,3 @@
-// Dettagli.tsx
 interface MovieDetailsProps {
     titolo: string
     generi: string[]

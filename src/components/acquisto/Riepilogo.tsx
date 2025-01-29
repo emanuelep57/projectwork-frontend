@@ -44,7 +44,7 @@ export const Riepilogo = ({
     return (
         <div className={`space-y-6 ${vistaMobile ? "pb-safe-area-bottom" : ""}`}>
             {/* Titolo del riepilogo */}
-            <h2 className="text-xl font-bold text-foreground mb-6">Riepilogo Ordine</h2>
+            <h2 className="text-xl font-bold text-foreground mb-6 mt-8">Riepilogo Ordine</h2>
 
             {/* Lista dei posti selezionati */}
             <div className="space-y-3">

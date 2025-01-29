@@ -5,7 +5,7 @@ import { ModalModifica } from '@/components/ordini/ModalModifica';
 import { ModalSelezionePosti } from '@/components/ordini/ModalSelezionePosti';
 import { Ordine } from '@/types/ordine';
 import { Posto } from '@/types/posto';
-import { DatiProiezione } from '@/types/proiezione';
+import { Proiezione } from '@/types/proiezione';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ordineAPI } from '@/services/ordini';
 import { toast } from '@/hooks/use-toast';
@@ -23,7 +23,7 @@ const PaginaBigliettiUtente = () => {
 
     // Stati per la gestione dell'ordine
     const [ordineSelezionato, setOrdineSelezionato] = useState<Ordine | null>(null);
-    const [proiezioniDisponibili, setProiezioniDisponibili] = useState<DatiProiezione[]>([]);
+    const [proiezioniDisponibili, setProiezioniDisponibili] = useState<Proiezione[]>([]);
     const [proiezioneTemporanea, setProiezioneTemporanea] = useState<string>("");
 
     // Stati per la gestione dei posti
@@ -141,9 +141,9 @@ const PaginaBigliettiUtente = () => {
 
         try {
             await ordineAPI.cambiaDataProiezione({
-                order_id: ordineSelezionato.id,
-                new_projection_id: parseInt(proiezioneTemporanea),
-                new_seats: postiSelezionati
+                id_ordine: ordineSelezionato.id,
+                id_nuova_proiezione: parseInt(proiezioneTemporanea),
+                nuovi_posti: postiSelezionati
             });
 
             toast({
@@ -176,8 +176,8 @@ const PaginaBigliettiUtente = () => {
 
         try {
             await ordineAPI.cambiaPosto({
-                order_id: ordineSelezionato.id,
-                new_seats: postiSelezionati
+                id_ordine: ordineSelezionato.id,
+                nuovi_posti: postiSelezionati
             });
 
             toast({

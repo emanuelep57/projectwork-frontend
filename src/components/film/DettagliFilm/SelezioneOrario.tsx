@@ -36,7 +36,7 @@ export const SelezioneOrario = ({proiezioni, onSelezionaOrario}: SelezioneOrario
                                 </span>
                                 {/* Sala */}
                                 <span className="text-sm text-muted-foreground">
-                                    Sala {proiezione.sala_id}
+                                    Sala {proiezione.sala}
                                 </span>
                                 {/* Prezzo */}
                                 <span className="text-sm text-muted-foreground">

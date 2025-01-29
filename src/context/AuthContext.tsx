@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { ContestoAutenticazioneTipo, DatiRegistrazione, Utente } from "@/types/auth.ts";
+import {ContestoAutenticazioneTipo, DatiRegistrazioneRequest, Utente} from "@/types/auth.ts";
 
 const ContestoAutenticazione = createContext<ContestoAutenticazioneTipo | null>(null);
 
@@ -16,7 +16,7 @@ export const ProviderAutenticazione = ({ children }: { children: ReactNode }) =>
             });
             if (risposta.ok) {
                 const dati = await risposta.json();
-                setUtente(dati.utente);
+                setUtente(dati.user);
             } else {
                 setUtente(null);
             }
@@ -45,8 +45,8 @@ export const ProviderAutenticazione = ({ children }: { children: ReactNode }) =>
         }
 
         const dati = await risposta.json();
-        if (dati.utente) {
-            setUtente(dati.utente);
+        if (dati.user) {
+            setUtente(dati.user);
         } else {
             // Se il login è riuscito ma non abbiamo i dati utente, verifichiamo lo stato
             await verificaAutenticazione();
@@ -54,7 +54,7 @@ export const ProviderAutenticazione = ({ children }: { children: ReactNode }) =>
     };
 
     //funzione per la registrazione
-    const registra = async (datiUtente: DatiRegistrazione) => {
+    const registra = async (datiUtente: DatiRegistrazioneRequest) => {
         const risposta = await fetch('http://localhost:5000/api/auth/register', {
             method: 'POST',
             headers: {
@@ -70,7 +70,7 @@ export const ProviderAutenticazione = ({ children }: { children: ReactNode }) =>
         }
 
         const dati = await risposta.json();
-        setUtente(dati.utente);
+        setUtente(dati.user);
     };
 
     //funzione per il logout

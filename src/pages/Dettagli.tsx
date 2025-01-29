@@ -10,6 +10,7 @@ import {SidebarMobile} from '@/components/film/DettagliFilm/SidebarMobile'; // C
 import {Sidebar} from '@/components/film/DettagliFilm/Sidebar.tsx'; // Componente per la selezione dei biglietti su dispositivi mobili
 import {Proiezione} from '@/types/proiezione'; // Tipo per rappresentare una proiezione
 import {format, parseISO} from 'date-fns'; // Libreria per la formattazione e gestione delle date
+import {it} from 'date-fns/locale';
 
 // Componente principale della pagina
 const Dettagli = () => {
@@ -32,11 +33,12 @@ const Dettagli = () => {
     const handleShowtimeSelect = (proiezione: Proiezione) => {
         navigate('/select-seats', {
             state: {
-                filmTitle: film?.titolo,
-                showtime: format(parseISO(proiezione.data_ora), 'PPpp'),
+                titoloFilm: film?.titolo,
+                data_ora: format(parseISO(proiezione.data_ora), 'PPpp', {locale: it}),
                 filmId: id,
-                projectionId: proiezione.id,
-                costo: proiezione.costo
+                proiezioneId: proiezione.id,
+                costo: proiezione.costo,
+                sala: proiezione.sala
             }
         });
     };

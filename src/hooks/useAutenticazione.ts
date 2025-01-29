@@ -8,7 +8,7 @@ import {LoginFormInputs, SignupFormInputs} from "@/types/modal.ts";
 export const useAutenticazione = (onSuccess: () => void, onOpenChange: (open: boolean) => void) => {
     // Stati e hooks necessari
     const [erroreApi, setErroreApi] = useState<string | null>(null);
-    const {login, register: authRegister} = useAuth();
+    const {accedi, registra: authRegister} = useAuth();
     const {toast} = useToast();
 
     // Inizializzazione dei form con react-hook-form
@@ -30,7 +30,7 @@ export const useAutenticazione = (onSuccess: () => void, onOpenChange: (open: bo
     const handleLogin = async (data: LoginFormInputs) => {
         try {
             setErroreApi(null);
-            await login(data.email, data.password);
+            await accedi(data.email, data.password);
             showSuccessToast("Successfully logged in!");
             onSuccess?.();
             onOpenChange?.(false);

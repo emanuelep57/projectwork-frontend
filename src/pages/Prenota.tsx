@@ -8,8 +8,8 @@ import { MovieInfo } from '@/components/acquisto/InfoAcquisto.tsx';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import {ChevronLeft, ShoppingCart} from 'lucide-react';
-import { Logo, UserSection } from "@/components/layout/Header.tsx";
+import {ShoppingCart} from 'lucide-react';
+import Header from "@/components/layout/Header.tsx";
 import AuthModal from "@/components/autenticazione/ModalAutenticazione.tsx";
 import Checkout from "@/components/acquisto/Checkout.tsx";
 import LegendaPosti from "@/components/posto/LegendaPosti.tsx";
@@ -19,12 +19,12 @@ const Prenota = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const state = location.state as {
-        movieTitle: string;
-        showtime: string;
-        movieId: string;
-        projectionId: number;
-        sala: string;
+        titoloFilm: string;
+        data_ora: string;
+        filmId: string;
+        proiezioneId: number;
         costo : number;
+        sala: string;
     };
 
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -39,7 +39,7 @@ const Prenota = () => {
         caricamento,
         errore,
         gestisciSelezionePosto
-    } = useSeats(state?.projectionId);
+    } = useSeats(state?.proiezioneId);
 
     const rows = ['A', 'B', 'C', 'D', 'E'];
     const seatsPerRow = 12;
@@ -64,25 +64,12 @@ const Prenota = () => {
     return (
         <div className="min-h-screen bg-background flex">
             <div className="flex-1 flex flex-col">
-                <header className="w-full bg-background border-b border-border py-4 px-6">
-                    <div className="flex items-center justify-between">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => navigate(-1)}
-                            className="hover:text-primary"
-                        >
-                            <ChevronLeft className="h-6 w-6"/>
-                        </Button>
-                        <Logo/>
-                        <UserSection isMobile={false}/>
-                    </div>
-                </header>
+                <Header/>
 
                 <MovieInfo
-                    title={state?.movieTitle}
+                    titolo={state?.titoloFilm}
                     sala={state?.sala}
-                    showtime={state?.showtime}
+                    data_ora={state?.data_ora}
                 />
 
                 <div className="flex-1 flex flex-col">
@@ -162,7 +149,7 @@ const Prenota = () => {
                 aperto={showCheckout}
                 onStatoChange={setShowCheckout}
                 postiSelezionati={postiSelezionati}
-                idProiezione={state?.projectionId}
+                idProiezione={state?.proiezioneId}
                 dettagliOspite={guestDetails}
                 onSuccess={() => navigate('/')}
                 costo={state.costo}

@@ -45,7 +45,7 @@ export const useDettagli = (idFilm: number): UseDettagli => {
                 //le trasformo in Date, quindi giorno mese anno e le metto in un set così
                 //da evitare doppioni e le mostro all'utente in ordine dalla più vicina
                 const dateUniche = [...new Set(datiProiezioni.map(p =>
-                    format(parseISO(p.data_ora), 'dd-MM-yyyy')
+                    format(parseISO(p.data_ora), 'yyyy-MM-dd')
                 ))]
                     .map(data => parseISO(data))
                     .sort((a, b) => a.getTime() - b.getTime());

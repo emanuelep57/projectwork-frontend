@@ -1,4 +1,4 @@
-import {useAutenticazione} from "@/hooks/useModal";
+import {useAutenticazione} from "@/hooks/useAutenticazione.ts";
 import {Dialog, DialogClose, DialogContent, DialogTrigger} from "@/components/ui/dialog";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import FormLogin from "@/components/autenticazione/FormLogin.tsx";
@@ -22,7 +22,7 @@ const ModaleAutenticazione = ({
                                   tabIniziale = "login",
                                   aperto,
                                   onCambioStato = () => {
-                                  }, 
+                                  },
                                   onSuccess = () => {
                                   }
                               }: ModalProps) => {
@@ -36,7 +36,7 @@ const ModaleAutenticazione = ({
         handleRegistrazione,
     } = useAutenticazione(onSuccess, onCambioStato);
 
-    
+
     //Gestisce la chiusura del modal e mi resetta tutti i campi quando chiuso
     const handleStato = (aperto: boolean) => {
         onCambioStato(aperto); // Chiama direttamente la funzione

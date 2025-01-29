@@ -1,17 +1,20 @@
-// types/auth.ts
-
-/**
- * Interfaccia che definisce la struttura di un utente
- */
-
-export interface base{
+export interface base {
     id: number;
 }
 
-export interface Utente extends base{
+export interface Utente extends base {
     email: string;
     nome: string;
 }
+
+// Interfaccia per la registrazione nel modal
+export interface DatiRegistrazioneRequest {
+    email: string;
+    password: string;
+    nome: string;
+    cognome: string;
+}
+
 
 export interface DatiRegistrazione extends Utente {
     password: string;
@@ -23,7 +26,7 @@ export interface ContestoAutenticazioneTipo {
     autenticato: boolean;
     inCaricamento: boolean;
     accedi: (email: string, password: string) => Promise<void>;
-    registra: (datiUtente: DatiRegistrazione) => Promise<void>;
+    registra: (datiUtente: DatiRegistrazioneRequest) => Promise<void>;
     disconnetti: () => Promise<void>;
     verificaAutenticazione: () => Promise<void>;
 }

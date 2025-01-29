@@ -99,6 +99,7 @@ const SezioneOrari = ({ films }: SezioneOrariProps) => {
                                 {/* Componente per la lista degli orari */}
                                 <ListaOrari
                                     filmId={film.id}
+                                    titolo={film.titolo}
                                     orariProiezione={orari}
                                     espanso={filmEspanso === film.id}
                                     onToggleEspanso={gestisciEspansione} // Callback per cambiare lo stato di espansione
