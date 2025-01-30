@@ -32,6 +32,8 @@ export const SchedaOrdine
            onEliminaOrdine
        } : SchedaOrdineProps) => {
 
+    console.log(ordine.biglietti)
+
     // Gestisce il download del PDF del biglietto
     const gestisciDownloadPdf = async (urlPdf?: string) => {
         if (!urlPdf) {
@@ -105,7 +107,12 @@ export const SchedaOrdine
                     <p><strong>Data Acquisto:</strong> {format(parseISO(ordine.data_acquisto), 'dd MMMM yyyy HH:mm')}
                     </p>
                     <p><strong>Data Spettacolo:</strong> {format(dataSpettacolo, 'dd MMMM yyyy HH:mm')}</p>
-                    <p><strong>Posti:</strong> {ordine.biglietti.map(b => b.posto).join(', ')}</p>
+                    <p><strong>Posti:</strong> {
+                        ordine.biglietti
+                            .flatMap(b => b.posti.map(p => `${p.fila}${p.numero}`)) // Esempio: "E2"
+                            .join(', ')
+                    }</p>
+
                     <p><strong>Totale:</strong> € {(ordine.proiezione.costo * ordine.biglietti.length).toFixed(2)}</p>
                 </div>
             </CardContent>

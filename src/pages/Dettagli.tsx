@@ -3,7 +3,7 @@ import {useState} from 'react';
 import {useParams, useNavigate} from 'react-router-dom'; // Hook per accedere ai parametri dell'URL e navigare tra le pagine
 import {useDettagli} from '@/hooks/useDettagli.ts'; // Hook personalizzato per ottenere i dettagli del film
 import {Skeleton} from "@/components/ui/skeleton"; // Componente per il caricamento placeholder
-import Header from "@/components/layout/Header"; // Componente per l'intestazione della pagina
+import Header from "@/components/layout/Header/Header.tsx"; // Componente per l'intestazione della pagina
 import {Hero} from '@/components/film/DettagliFilm/HeroDettagli.tsx'; // Componente che mostra l'immagine principale del film
 import {Sinossi} from "@/components/film/DettagliFilm/Sinossi"; // Componente per la descrizione del film
 import {SidebarMobile} from '@/components/film/DettagliFilm/SidebarMobile'; // Componente per la barra laterale con le informazioni sui biglietti

@@ -106,27 +106,33 @@ const Checkout = ({
                             </div>
                             {/* totale */}
                             <div className="flex justify-between font-medium pt-2 border-t border-border">
-                                <span>Total</span>
+                                <span>Totale</span>
                                 <span>€ {(postiSelezionati.length * costo)}</span>
                             </div>
 
+                            <h3 className="text-md font-semibold pt-4 border-b border-border pb-4">Dettagli Ospiti:</h3>
                             {/* Mostra i dettagli degli ospiti (se ci sono più posti) */}
                             {postiSelezionati.slice(1).map((seat) => (
-                                <div key={seat.etichetta} className="space-y-2 mt-4 border-t border-border pt-4">
-                                    <h3 className="text-sm font-medium">Guest Details for Seat {seat.etichetta}</h3>
-                                    <div className="grid grid-cols-2 gap-2">
+                                <div key={seat.etichetta} className="space-y-2 pt-4">
+
+                                    <div className="grid grid-cols-3 gap-2">
                                         <div>
-                                            <Label>First Name</Label>
-                                            <Input
-                                                value={dettagliOspite[seat.etichetta]?.nome || ''}
-                                                readOnly
-                                            />
+                                            <Label>Nome</Label>
+                                            <p className="text-sm mt-1">
+                                                {dettagliOspite[seat.etichetta]?.nome || '-'}
+                                            </p>
                                         </div>
                                         <div>
-                                            <Label>Last Name</Label>
-                                            <span>
-                                                {dettagliOspite[seat.etichetta]?.cognome || ''}
-                                            </span>
+                                            <Label>Cognome</Label>
+                                            <p className="text-sm mt-1">
+                                                {dettagliOspite[seat.etichetta]?.cognome || '-'}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <Label>Posto</Label>
+                                            <p className="text-sm mt-1">
+                                                {seat.etichetta || '-'}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +143,7 @@ const Checkout = ({
                         <form onSubmit={handleSubmit} className="space-y-4">
                             {/* Campo per il numero della carta */}
                             <div className="space-y-2">
-                                <Label htmlFor="cardNumber">Card Number</Label>
+                                <Label htmlFor="cardNumber">Numero della carta</Label>
                                 <div className="relative">
                                     <Input
                                         id="cardNumber"
@@ -151,7 +157,7 @@ const Checkout = ({
                             {/* Campi per la scadenza e il CVC */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="expiry">Expiry Date</Label>
+                                    <Label htmlFor="expiry">Data di scadenza</Label>
                                     <Input
                                         id="expiry"
                                         value={dataScadenza}

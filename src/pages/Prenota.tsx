@@ -9,7 +9,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {ShoppingCart} from 'lucide-react';
-import Header from "@/components/layout/Header.tsx";
+import Header from "@/components/layout/Header/Header.tsx";
 import AuthModal from "@/components/autenticazione/ModalAutenticazione.tsx";
 import Checkout from "@/components/acquisto/Checkout.tsx";
 import LegendaPosti from "@/components/posto/LegendaPosti.tsx";
@@ -78,7 +78,7 @@ const Prenota = () => {
                             <div className="w-full h-1 bg-foreground rounded-full shadow-[0_0_15px_rgba(var(--foreground),0.5)]"/>
                             <div className="w-full h-12 bg-gradient-to-b from-foreground/10 to-transparent"/>
                             <p className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-sm text-muted-foreground uppercase">
-                                Screen
+                                Schermo
                             </p>
                         </div>
 

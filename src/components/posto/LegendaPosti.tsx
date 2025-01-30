@@ -11,19 +11,19 @@ export const LegendaPosti: React.FC = () => (
             <div className="transform scale-75">
                 <IconaPosto />
             </div>
-            <span className="text-xs text-zinc-400">Available</span>
+            <span className="text-xs text-zinc-400">Disponibile</span>
         </div>
         <div className="flex items-center gap-2">
             <div className="transform scale-75">
                 <IconaPosto occupato={true}/>
             </div>
-            <span className="text-xs text-zinc-400">Booked</span>
+            <span className="text-xs text-zinc-400">Occupato</span>
         </div>
         <div className="flex items-center gap-2">
             <div className="transform scale-75">
                 <IconaPosto selezionato={true}/>
             </div>
-            <span className="text-xs text-zinc-400">Selected</span>
+            <span className="text-xs text-zinc-400">Selezionato</span>
         </div>
     </div>
 );

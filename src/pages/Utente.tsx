@@ -1,14 +1,16 @@
-import { useState, useCallback } from 'react';
-import { useOrdini } from '@/hooks/useOrdini';
-import { SchedaOrdine } from '@/components/ordini/SchedaOrdine';
-import { ModalModifica } from '@/components/ordini/ModalModifica';
-import { ModalSelezionePosti } from '@/components/ordini/ModalSelezionePosti';
-import { Ordine } from '@/types/ordine';
-import { Posto } from '@/types/posto';
-import { Proiezione } from '@/types/proiezione';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ordineAPI } from '@/services/ordini';
-import { toast } from '@/hooks/use-toast';
+import {useState, useCallback} from 'react';
+import {useOrdini} from '@/hooks/useOrdini';
+import {SchedaOrdine} from '@/components/ordini/SchedaOrdine';
+import {ModalModifica} from '@/components/ordini/ModalModifica';
+import {ModalSelezionePosti} from '@/components/ordini/ModalSelezionePosti';
+import {Ordine} from '@/types/ordine';
+import {Posto} from '@/types/posto';
+import {Proiezione} from '@/types/proiezione';
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import {ordineAPI} from '@/services/ordini';
+import {toast} from '@/hooks/use-toast';
+import Header from "@/components/layout/Header/Header.tsx";
+import Footer from "@/components/layout/Footer";
 
 /**
  * Pagina che gestisce la visualizzazione e modifica dei biglietti dell'utente
@@ -19,7 +21,7 @@ import { toast } from '@/hooks/use-toast';
  * - Eliminare ordini
  */
 const PaginaBigliettiUtente = () => {
-    const { ordiniFuturi, ordiniPassati, inCaricamento, errore, fetchOrdini, eliminaOrdine } = useOrdini();
+    const {ordiniFuturi, ordiniPassati, inCaricamento, errore, fetchOrdini, eliminaOrdine} = useOrdini();
 
     // Stati per la gestione dell'ordine
     const [ordineSelezionato, setOrdineSelezionato] = useState<Ordine | null>(null);
@@ -51,8 +53,14 @@ const PaginaBigliettiUtente = () => {
             }
 
             const dati = await risposta.json();
-            setProiezioniDisponibili(dati.proiezioni);
-        } catch {
+
+            if (!Array.isArray(dati)) {
+                throw new Error('Dati proiezioni non validi');
+            }
+
+            setProiezioniDisponibili(dati);
+        } catch (error) {
+            console.error(error);
             toast({
                 title: "Errore",
                 description: "Impossibile caricare le proiezioni disponibili",
@@ -139,11 +147,21 @@ const PaginaBigliettiUtente = () => {
             return;
         }
 
+        const postiFormattati = postiSelezionati.map(posto => ({ id_posto: posto}));
+
+
+        console.log("Payload inviato:", JSON.stringify({
+            order_id: ordineSelezionato.id,
+            new_projection_id: parseInt(proiezioneTemporanea),
+            new_seats: postiFormattati
+        }, null, 2));
+
+
         try {
             await ordineAPI.cambiaDataProiezione({
-                id_ordine: ordineSelezionato.id,
-                id_nuova_proiezione: parseInt(proiezioneTemporanea),
-                nuovi_posti: postiSelezionati
+                order_id: ordineSelezionato.id,
+                new_projection_id: parseInt(proiezioneTemporanea),
+                new_seats: postiFormattati
             });
 
             toast({
@@ -256,76 +274,81 @@ const PaginaBigliettiUtente = () => {
     }
 
     return (
-        <div className="container mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-6">I Miei Biglietti</h1>
 
-            <ModalModifica
-                isOpen={dialogoProiezioneAperto}
-                onClose={() => setDialogoProiezioneAperto(false)}
-                ordineSelezionato={ordineSelezionato}
-                proiezioniDisponibili={proiezioniDisponibili}
-                proiezioneTemporanea={proiezioneTemporanea}
-                onCambioProiezione={setProiezioneTemporanea}
-                onConferma={gestisciConfermaProiezione}
-            />
+        <div className="min-h-screen flex flex-col">
+            <Header/>
+            <div className="flex-1 container mx-auto p-6">
+                <h1 className="text-3xl font-bold mb-6">I Miei Biglietti</h1>
 
-            <ModalSelezionePosti
-                isAperto={dialogoPostiAperto}
-                onChiudi={() => setDialogoPostiAperto(false)}
-                ordineSelezionato={ordineSelezionato}
-                postiDisponibili={postiDisponibili}
-                postiOccupati={postiOccupati}
-                postiSelezionati={postiSelezionati}
-                errore={erroreSelezionePosti}
-                onTogglePosto={gestisciTogglePosto}
-                onConferma={proiezioneTemporanea ? gestisciCambioProiezioneEPosti : gestisciCambioPosti}
-                isCambioProiezione={!!proiezioneTemporanea}
-            />
+                <ModalModifica
+                    isOpen={dialogoProiezioneAperto}
+                    onClose={() => setDialogoProiezioneAperto(false)}
+                    ordineSelezionato={ordineSelezionato}
+                    proiezioniDisponibili={proiezioniDisponibili}
+                    proiezioneTemporanea={proiezioneTemporanea}
+                    onCambioProiezione={setProiezioneTemporanea}
+                    onConferma={gestisciConfermaProiezione}
+                />
 
-            <Tabs defaultValue="future">
-                <TabsList className="grid w-full grid-cols-2 mb-4">
-                    <TabsTrigger value="future">Spettacoli Futuri</TabsTrigger>
-                    <TabsTrigger value="past">Spettacoli Passati</TabsTrigger>
-                </TabsList>
+                <ModalSelezionePosti
+                    isAperto={dialogoPostiAperto}
+                    onChiudi={() => setDialogoPostiAperto(false)}
+                    ordineSelezionato={ordineSelezionato}
+                    postiDisponibili={postiDisponibili}
+                    postiOccupati={postiOccupati}
+                    postiSelezionati={postiSelezionati}
+                    errore={erroreSelezionePosti}
+                    onTogglePosto={gestisciTogglePosto}
+                    onConferma={proiezioneTemporanea ? gestisciCambioProiezioneEPosti : gestisciCambioPosti}
+                    isCambioProiezione={!!proiezioneTemporanea}
+                />
 
-                <TabsContent value="future">
-                    {ordiniFuturi.length === 0 ? (
-                        <p className="text-center text-muted-foreground">
-                            Nessuno spettacolo futuro
-                        </p>
-                    ) : (
-                        ordiniFuturi.map(ordine => (
-                            <SchedaOrdine
-                                key={ordine.id}
-                                ordine={ordine}
-                                isOrdineFuturo={true}
-                                onModificaPosti={gestisciModificaPosti}
-                                onModificaOrdine={gestisciModificaOrdine}
-                                onEliminaOrdine={eliminaOrdine}
-                            />
-                        ))
-                    )}
-                </TabsContent>
+                <Tabs defaultValue="future">
+                    <TabsList className="grid w-full grid-cols-2 mb-4">
+                        <TabsTrigger value="future">Spettacoli Futuri</TabsTrigger>
+                        <TabsTrigger value="past">Spettacoli Passati</TabsTrigger>
+                    </TabsList>
 
-                <TabsContent value="past">
-                    {ordiniPassati.length === 0 ? (
-                        <p className="text-center text-muted-foreground">
-                            Nessuno spettacolo passato
-                        </p>
-                    ) : (
-                        ordiniPassati.map(ordine => (
-                            <SchedaOrdine
-                                key={ordine.id}
-                                ordine={ordine}
-                                isOrdineFuturo={false}
-                                onModificaPosti={gestisciModificaPosti}
-                                onModificaOrdine={gestisciModificaOrdine}
-                                onEliminaOrdine={eliminaOrdine}
-                            />
-                        ))
-                    )}
-                </TabsContent>
-            </Tabs>
+                    <TabsContent value="future">
+                        {ordiniFuturi.length === 0 ? (
+                            <p className="text-center text-muted-foreground">
+                                Nessuno spettacolo futuro
+                            </p>
+                        ) : (
+                            ordiniFuturi.map(ordine => (
+                                <SchedaOrdine
+                                    key={ordine.id}
+                                    ordine={ordine}
+                                    isOrdineFuturo={true}
+                                    onModificaPosti={gestisciModificaPosti}
+                                    onModificaOrdine={gestisciModificaOrdine}
+                                    onEliminaOrdine={eliminaOrdine}
+                                />
+                            ))
+                        )}
+                    </TabsContent>
+
+                    <TabsContent value="past">
+                        {ordiniPassati.length === 0 ? (
+                            <p className="text-center text-muted-foreground">
+                                Nessuno spettacolo passato
+                            </p>
+                        ) : (
+                            ordiniPassati.map(ordine => (
+                                <SchedaOrdine
+                                    key={ordine.id}
+                                    ordine={ordine}
+                                    isOrdineFuturo={false}
+                                    onModificaPosti={gestisciModificaPosti}
+                                    onModificaOrdine={gestisciModificaOrdine}
+                                    onEliminaOrdine={eliminaOrdine}
+                                />
+                            ))
+                        )}
+                    </TabsContent>
+                </Tabs>
+            </div>
+            <Footer/>
         </div>
     );
 };
