@@ -159,9 +159,9 @@ const PaginaBigliettiUtente = () => {
 
         try {
             await ordineAPI.cambiaDataProiezione({
-                order_id: ordineSelezionato.id,
-                new_projection_id: parseInt(proiezioneTemporanea),
-                new_seats: postiFormattati
+                id_ordine: ordineSelezionato.id,
+                id_nuova_proiezione: parseInt(proiezioneTemporanea),
+                nuovi_posti: postiFormattati
             });
 
             toast({
@@ -195,7 +195,7 @@ const PaginaBigliettiUtente = () => {
         try {
             await ordineAPI.cambiaPosto({
                 id_ordine: ordineSelezionato.id,
-                nuovi_posti: postiSelezionati
+                nuovi_posti: postiSelezionati.map(id => ({ id_posto: id }))
             });
 
             toast({
@@ -222,7 +222,9 @@ const PaginaBigliettiUtente = () => {
         setErroreSelezionePosti(null);
 
         const postoOccupato = postiOccupati.some(p => p.id === idPosto) &&
-            !ordineSelezionato?.biglietti.some(b => parseInt(b.posto) === idPosto);
+            !ordineSelezionato?.biglietti.some(b =>
+                b.posti.some(p => p.id === idPosto) // Ora controlla nell'array `posti`
+            );
 
         if (postoOccupato) {
             setErroreSelezionePosti("Questo posto è già occupato");

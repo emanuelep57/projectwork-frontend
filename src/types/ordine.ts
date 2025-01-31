@@ -1,6 +1,9 @@
+import {Posto} from "@/types/posto.ts";
+import {Proiezione} from "@/types/proiezione.ts";
+
 export interface BigliettoOrdine {
     id: number;
-    posto: string;
+    posti:Array<Posto>;
     nome_ospite?: string;
     cognome_ospite?: string;
 }
@@ -19,13 +22,30 @@ export interface Ordine {
     biglietti: BigliettoOrdine[];
 }
 
-export interface RichiestaAggiornamentoOrdine {
-    id_ordine: number;
-    id_nuova_proiezione: number;
-    nuovi_posti: number[];
+export interface PropsDialogoProiezione {
+    isOpen: boolean;
+    onClose: () => void;
+    ordineSelezionato: Ordine | null;
+    proiezioniDisponibili: Proiezione[];           // Lista delle proiezioni che l'utente può scegliere
+    proiezioneTemporanea: string;                      // ID della proiezione temporaneamente selezionata
+    onCambioProiezione: (valore: string) => void;
+    onConferma: () => Promise<void>;
+}
+
+export interface SchedaOrdineProps {
+    ordine: Ordine;
+    isOrdineFuturo: boolean;
+    onModificaPosti: (ordine: Ordine) => void;
+    onModificaOrdine: (ordine: Ordine) => void;
+    onEliminaOrdine: (ordineId: number) => void;
 }
 
 export interface RichiestaCambioPosto {
     id_ordine: number;
-    nuovi_posti: number[];
+    nuovi_posti: { id_posto: number }[];
 }
+
+export interface RichiestaAggiornamentoOrdine extends RichiestaCambioPosto {
+    id_nuova_proiezione: number;
+}
+

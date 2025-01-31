@@ -2,13 +2,7 @@ import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-interface SelezioneDataProps {
-    dateDisponibili: Date[]; // Array delle date disponibili
-    dataSelezionata: Date | null; // Data attualmente selezionata (null se nessuna è selezionata)
-    onSelezionaData: (data: Date) => void; // Funzione chiamata quando una data viene selezionata
-    vistaMobile?: boolean; // variabile per cambiare l'aspetto del componente quando si passa a mobile
-}
+import {SelezioneDataProps} from "@/types/proiezione.ts";
 
 // - Mobile: le date vengono mostrare in un menù scorrevole orizzontalmente
 // - Desktop: Le date vengono mostrate in un elenco verticale

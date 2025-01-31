@@ -2,7 +2,7 @@ import {useState} from "react";
 import {useToast} from "@/hooks/use-toast.ts";
 import {useAuth} from "@/context/AuthContext.tsx";
 import {useForm} from "react-hook-form";
-import {LoginFormInputs, SignupFormInputs} from "@/types/modal.ts";
+import {LoginFormInputs, SignupFormInputs} from "@/types/auth.ts";
 
 //hook che gestisce l'autenticazione
 export const useAutenticazione = (onSuccess: () => void, onOpenChange: (open: boolean) => void) => {

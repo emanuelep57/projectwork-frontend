@@ -2,23 +2,8 @@ import { Button } from "@/components/ui/button";
 import FormError from "@/components/autenticazione/FormError";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {FormEvent} from "react";
-import { UseFormRegister, FieldErrors, UseFormGetValues } from "react-hook-form";
+import {RegistrazioneProps} from "@/types/auth.ts";
 
-interface SignupFormInputs {
-    nome: string;
-    cognome: string;
-    email: string;
-    password: string;
-    confermaPassword: string;
-}
-
-interface RegistrazioneProps {
-    onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-    errori: FieldErrors<SignupFormInputs>;
-    registra: UseFormRegister<SignupFormInputs>;
-    getValori: UseFormGetValues<SignupFormInputs>;
-}
 
 const FormRegistrazione = ({ onSubmit, errori, registra, getValori }: RegistrazioneProps) => (
     <form onSubmit={onSubmit} className="grid gap-4">

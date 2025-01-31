@@ -1,20 +1,10 @@
 import {format, parseISO} from 'date-fns';
 import {Download, Edit, Grid, Trash2} from 'lucide-react';
-import {Ordine} from '@/types/ordine';
+import {SchedaOrdineProps} from '@/types/ordine';
 import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {bigliettoAPI} from '@/services/biglietti';
 import {toast} from '@/hooks/use-toast';
-
-
-interface SchedaOrdineProps {
-    ordine: Ordine;
-    isOrdineFuturo: boolean;
-    onModificaPosti: (ordine: Ordine) => void;
-    onModificaOrdine: (ordine: Ordine) => void;
-    onEliminaOrdine: (ordineId: number) => void;
-}
-
 /*
  card che mostra gli ordini effettuati e permette di
  - Scaricare il PDF del biglietto

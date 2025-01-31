@@ -1,10 +1,5 @@
 import {Clock, Film, MapPin} from "lucide-react";
-
-interface MovieInfoProps {
-    titolo: string;
-    sala: string;
-    data_ora: string;
-}
+import {MovieInfoProps} from "@/types/film.ts";
 
 export const MovieInfo= ({ titolo, sala, data_ora }: MovieInfoProps) => (
     <div className="bg-muted/5 border-b border-border">

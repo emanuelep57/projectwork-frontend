@@ -5,16 +5,8 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 import {useNavigate} from "react-router-dom";
+import {Film, HeroProps} from "@/types/film.ts";
 
-interface Film{
-    titolo: string
-    url_copertina: string
-    id: number
-}
-
-interface HeroProps{
-    films: Film[]
-}
 
 const HeroSection = ({films} : HeroProps) => {
 

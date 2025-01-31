@@ -3,19 +3,9 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { X } from "lucide-react";
 import { SelezioneOrario } from "@/components/film/DettagliFilm/SelezioneOrario.tsx";
-import { Proiezione } from "@/types/proiezione";
+import {SidebarMobileProps} from "@/types/proiezione";
 import { Button } from "@/components/ui/button";
 import { SelezioneData } from "@/components/film/DettagliFilm/SelezioneData.tsx";
-
-interface SidebarMobileProps {
-    aperto: boolean; // Stato di apertura e chiusura
-    onCambiaStatoAperto: (aperto: boolean) => void; // Callback per modificare lo stato di apertura.
-    dateDisponibili: Date[]; // Elenco delle date disponibili per la selezione.
-    dataSelezionata: Date | null; // Data attualmente selezionata dall'utente.
-    proiezioni: Proiezione[]; // Elenco degli orari di proiezione disponibili per la data selezionata.
-    onSelezionaData: (data: Date) => void; // Callback per gestire la selezione di una data.
-    onSelezionaOrario: (proiezione: Proiezione) => void; // Callback per gestire la selezione di un orario.
-}
 
 export const SidebarMobile = ({aperto, onCambiaStatoAperto, dateDisponibili, dataSelezionata,
                                   proiezioni, onSelezionaData, onSelezionaOrario,}: SidebarMobileProps) => {

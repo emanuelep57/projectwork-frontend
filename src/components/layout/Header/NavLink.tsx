@@ -1,3 +1,4 @@
+//lascio qui l'interfaccia perché è l'unica per un component navbar
 interface NavLinkProps {
     href: string;
     vistaMobile?: boolean;

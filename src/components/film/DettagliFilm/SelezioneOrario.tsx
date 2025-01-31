@@ -1,12 +1,7 @@
 import { Clock } from "lucide-react";
 import { format, parseISO } from "date-fns";
-import { Proiezione } from "@/types/proiezione";
+import {SelezioneOrarioProps} from "@/types/proiezione";
 import { Button } from "@/components/ui/button";
-
-interface SelezioneOrarioProps {
-    proiezioni: Proiezione[]; // Array delle proiezioni
-    onSelezionaOrario: (proiezione: Proiezione) => void; // Funzione per gestire la selezione di un orario.
-}
 
 export const SelezioneOrario = ({proiezioni, onSelezionaOrario}: SelezioneOrarioProps) => {
     return (

@@ -3,15 +3,8 @@
 
 import { SelezioneOrario } from "@/components/film/DettagliFilm/SelezioneOrario.tsx";
 import { SelezioneData } from "@/components/film/DettagliFilm/SelezioneData.tsx";
-import { Proiezione } from "@/types/proiezione.ts";
+import {SidebarProps} from "@/types/proiezione.ts";
 
-interface SidebarProps {
-    dateDisponibili: Date[]; //array delle date disponibili
-    dataSelezionata: Date | null; //data selezionata
-    proiezioni: Proiezione[]; //array di proiezioni disponibili per la data
-    onSelezionaData: (data: Date) => void; //funzione chiamata quando si seleziona la data
-    onSelezionaOrario: (proiezione: Proiezione) => void; //funzione chiamata quando si seleziona l'orario
-}
 
 export const Sidebar = ({dateDisponibili, dataSelezionata, proiezioni, onSelezionaData, onSelezionaOrario}: SidebarProps) => {
     return (

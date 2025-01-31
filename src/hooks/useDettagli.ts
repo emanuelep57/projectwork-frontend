@@ -1,13 +1,13 @@
 // In questo Hook ho messo la logica che gestisce il caricamento dei dettagli e delle proiezioni disponibili
 import { useState, useEffect } from 'react';
-import { DettagliFilm } from '@/types/film';
+import {Film} from '@/types/film';
 import { Proiezione } from '../types/proiezione';
 import { filmAPI } from '@/services/films';
 import { format, parseISO, isSameDay } from 'date-fns';
 import { proiezioneAPI } from "@/services/proiezioni.ts";
 
 interface UseDettagli {
-    film: DettagliFilm | null;
+    film: Film | null;
     proiezioni: Proiezione[];
     caricamento: boolean;
     errore: string | null;
@@ -19,7 +19,7 @@ interface UseDettagli {
 
 export const useDettagli = (idFilm: number): UseDettagli => {
 
-    const [film, setFilm] = useState<DettagliFilm | null>(null);
+    const [film, setFilm] = useState<Film | null>(null);
     const [proiezioni, setProiezioni] = useState<Proiezione[]>([]);
     const [caricamento, setCaricamento] = useState<boolean>(true);
     const [errore, setErrore] = useState<string | null>(null);
@@ -38,7 +38,7 @@ export const useDettagli = (idFilm: number): UseDettagli => {
                 ]);
 
                 // Aggiorna lo stato con i dati ricevuti
-                setFilm(datiFilm as DettagliFilm);
+                setFilm(datiFilm);
                 setProiezioni(datiProiezioni);
 
                 //Allora, qui praticamente parto da tutte le datetime delle proiezioni e

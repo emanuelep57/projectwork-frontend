@@ -1,22 +1,41 @@
-export interface Film {
+interface base{
     id: number
     titolo: string
     url_copertina: string
+}
+
+export interface Film extends base{
     generi: string[]
     regista: string
     durata: number
     descrizione?: string
 }
 
-export interface HeroFilm {
+export interface MovieDetailsProps {
     titolo: string
-    url_copertina: string
-    id: number
+    generi: string[]
+    regista: string
+    durata: number
 }
 
-export interface DettagliFilm extends Film {
-    descrizione: string
-    durata: number  // Aggiunto qui anche per assicurarsi che sia presente
+export interface DettagliProps {
+    film: Film;
+}
+
+export interface HeroDettagli extends DettagliProps {
+    onAcquista?: () => void;
+}
+
+export type HeroHomepage = base
+
+export interface MovieInfoProps {
+    titolo: string;
+    sala: string;
+    data_ora: string;
+}
+
+export interface SinossiProps {
+    descrizione: string;
 }
 
 export interface CopertinaProps {

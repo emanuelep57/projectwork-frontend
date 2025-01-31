@@ -1,6 +1,5 @@
 import { format, parseISO } from 'date-fns';
-import { Ordine } from '@/types/ordine';
-import { Proiezione } from '@/types/proiezione';
+import {PropsDialogoProiezione} from '@/types/ordine';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -17,18 +16,6 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select';
-
-
-interface PropsDialogoProiezione {
-    isOpen: boolean;
-    onClose: () => void;
-    ordineSelezionato: Ordine | null;
-    proiezioniDisponibili: Proiezione[];           // Lista delle proiezioni che l'utente può scegliere
-    proiezioneTemporanea: string;                      // ID della proiezione temporaneamente selezionata
-    onCambioProiezione: (valore: string) => void;
-    onConferma: () => Promise<void>;
-}
-
 
 //modal di modifica della data e dei posti.
 export const ModalModifica = ({

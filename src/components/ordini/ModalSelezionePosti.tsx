@@ -61,7 +61,11 @@ export const ModalSelezionePosti = ({
 
     // Prepara etichette per i posti occupati
     const etichettePostiOccupati = postiOccupati
-        .filter(posto => !ordineSelezionato?.biglietti.some(t => parseInt(t.posto) === posto.id))
+        .filter(posto =>
+            !ordineSelezionato?.biglietti.some(t =>
+                t.posti.some(p => p.id === posto.id)
+            )
+        )
         .map(posto => `${posto.fila}${posto.numero}`);
 
     //creazione delle etichette per i posti selezionati

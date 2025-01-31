@@ -1,14 +1,10 @@
 import { Badge } from "@/components/ui/badge"; // Componente per etichette (badge)
 import { Button } from "@/components/ui/button"; // Componente per bottoni
-import { Film } from "@/types/film"; // Tipo personalizzato per i film
+import {HeroDettagli} from "@/types/film"; // Tipo personalizzato per i film
 import { Dettagli } from "@/components/film/DettagliFilm/Dettagli.tsx"; // Componente per i metadati del film
 
-interface HeroProps {
-    film: Film; // Dati del film da visualizzare
-    onAcquista: () => void; // Callback per l'acquisto dei biglietti
-}
 
-export const Hero = ({ film, onAcquista }: HeroProps) => {
+export const Hero = ({ film, onAcquista }: HeroDettagli) => {
     return (
         <div className="h-[70vh] relative">
             {/* Immagine di copertina */}

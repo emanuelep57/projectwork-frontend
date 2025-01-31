@@ -5,16 +5,7 @@ import FormLogin from "@/components/autenticazione/FormLogin.tsx";
 import {X} from "lucide-react";
 import FormError from "@/components/autenticazione/FormError";
 import FormRegistrazione from "@/components/autenticazione/FormRegistrazione.tsx";
-import {ReactNode} from "react";
-
-interface ModalProps {
-    children?: ReactNode; //Il modal può avere children, esempio un bottone che se cliccato apre il modal, oppure si può aprire in automatico se è richiesto il login
-    tabIniziale?: "login" | "signup";
-    aperto?: boolean;
-    onCambioStato?: (aperto: boolean) => void;
-    onSuccess?: () => void;
-}
-
+import {ModalProps} from "@/types/auth.ts";
 
 //Modal che gestisce l'autenticazione con le schede login e registrazione
 const ModaleAutenticazione = ({

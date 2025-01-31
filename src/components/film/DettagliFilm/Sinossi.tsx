@@ -1,8 +1,6 @@
 //SInossi del film
 
-interface SinossiProps {
-    descrizione: string;
-}
+import {SinossiProps} from "@/types/film.ts";
 
 export const Sinossi = ({ descrizione }: SinossiProps) => {
     return (

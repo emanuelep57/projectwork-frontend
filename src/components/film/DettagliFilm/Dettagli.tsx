@@ -1,9 +1,5 @@
 import {Clock, User} from "lucide-react";
-import {Film} from "@/types/film.ts";
-
-interface DettagliProps {
-    film: Film;
-}
+import {DettagliProps} from "@/types/film.ts";
 
 export const Dettagli = ({ film }: DettagliProps) => {
     return (

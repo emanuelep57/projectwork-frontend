@@ -2,20 +2,9 @@ import { Button } from "@/components/ui/button";
 import FormError from "@/components/autenticazione/FormError";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UseFormRegister, FieldErrors } from "react-hook-form";
-import {FormEvent} from "react";
+import {LoginFormProps} from "@/types/auth.ts";
 
 
-interface LoginFormInputs {
-    email: string;
-    password: string;
-}
-
-interface LoginFormProps {
-    onSubmit: (e: FormEvent<HTMLFormElement>) => void; //funzione che accetta un evento di tipo FormEvent generato da un <form>.
-    errori: FieldErrors<LoginFormInputs>; //errori dei campi
-    registra: UseFormRegister<LoginFormInputs>; //registra i campi con react-hook-form
-}
 
 //componente che gestisce il form del login
 const FormLogin = ({ onSubmit, errori, registra }: LoginFormProps) => (

@@ -1,9 +1,4 @@
-interface MovieDetailsProps {
-    titolo: string
-    generi: string[]
-    regista: string
-    durata: number
-}
+import {MovieDetailsProps} from "@/types/film.ts";
 
 export const DettagliFilm = ({titolo, generi, regista, durata}: MovieDetailsProps) => {
     return (
