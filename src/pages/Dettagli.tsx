@@ -1,32 +1,31 @@
-// Importazioni necessarie
 import {useState} from 'react';
-import {useParams, useNavigate} from 'react-router-dom'; // Hook per accedere ai parametri dell'URL e navigare tra le pagine
-import {useDettagli} from '@/hooks/useDettagli.ts'; // Hook personalizzato per ottenere i dettagli del film
-import {Skeleton} from "@/components/ui/skeleton"; // Componente per il caricamento placeholder
-import Header from "@/components/layout/Header/Header.tsx"; // Componente per l'intestazione della pagina
-import {Hero} from '@/components/film/DettagliFilm/HeroDettagli.tsx'; // Componente che mostra l'immagine principale del film
-import {Sinossi} from "@/components/film/DettagliFilm/Sinossi"; // Componente per la descrizione del film
-import {SidebarMobile} from '@/components/film/DettagliFilm/SidebarMobile'; // Componente per la barra laterale con le informazioni sui biglietti
-import {Sidebar} from '@/components/film/DettagliFilm/Sidebar.tsx'; // Componente per la selezione dei biglietti su dispositivi mobili
-import {Proiezione} from '@/types/proiezione'; // Tipo per rappresentare una proiezione
-import {format, parseISO} from 'date-fns'; // Libreria per la formattazione e gestione delle date
+import {useParams, useNavigate} from 'react-router-dom';
+import {useDettagli} from '@/hooks/useDettagli.ts';
+import {Skeleton} from "@/components/ui/skeleton";
+import Header from "@/components/layout/Header/Header.tsx";
+import {Hero} from '@/components/film/DettagliFilm/HeroDettagli.tsx';
+import {Sinossi} from "@/components/film/DettagliFilm/Sinossi";
+import {SidebarMobile} from '@/components/film/DettagliFilm/SidebarMobile';
+import {Sidebar} from '@/components/film/DettagliFilm/Sidebar.tsx';
+import {Proiezione} from '@/types/proiezione';
+import {format, parseISO} from 'date-fns';
 import {it} from 'date-fns/locale';
 
-// Componente principale della pagina
+// Pagina dove si vedono tutti i dettagli sul film e si possono vedere i vari orari nei diversi giorni
 const Dettagli = () => {
-    const {id} = useParams<{ id: string }>(); // Prendo l'id dai parametri della pagina
-    const navigate = useNavigate(); // Hook per navigare tra le pagine
-    const [sheetOpen, setSheetOpen] = useState(false); // Stato per gestire l'apertura del foglio mobile
+    const {id} = useParams<{ id: string }>(); // Prendo l'id del film dai parametri della pagina
+    const navigate = useNavigate();
+    const [sheetOpen, setSheetOpen] = useState(false); // Stato per gestire l'apertura dello sheet mobile
 
     // Uso il custom hook per ottenere i dettagli del film
     const {
-        film, // Dettagli del film
-        caricamento, // Stato di caricamento
-        errore, // Eventuale errore durante il caricamento
-        dataSelezionata, // Data selezionata dall'utente
-        setDataSelezionata, // Funzione per aggiornare la data selezionata
-        getProiezioniPerData, // Funzione per ottenere gli orari delle proiezioni per una data specifica
-        dateDisponibili // Elenco delle date disponibili per la proiezione
+        film,
+        caricamento,
+        errore,
+        dataSelezionata,
+        setDataSelezionata,
+        getProiezioniPerData,
+        dateDisponibili
     } = useDettagli(Number(id!)); // Conversione dell'id da stringa a numero
 
     // Funzione chiamata quando un utente seleziona un orario di proiezione che porta alla pagina di selezione dei posti

@@ -1,3 +1,4 @@
+//semplice footer in fondo alla pagina
 const Footer = () => {
     return (
         <footer className="bg-background text-white py-8 md:py-12 border-t border-border">
@@ -9,7 +10,7 @@ const Footer = () => {
                     <span className="text-xl font-bold">PEGASUS</span>
                 </div>
                 <p className="text-sm md:text-base text-muted-foreground">
-                    Cinema come mai prima
+                    Vivi il cinema come mai prima
                 </p>
             </div>
         </footer>

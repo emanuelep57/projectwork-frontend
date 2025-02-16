@@ -1,14 +1,14 @@
 import { format } from 'date-fns'
 import { it } from 'date-fns/locale'
-import type {Proiezione, ProiezioniRaggruppate } from '@/types/proiezione'
+import type {Proiezione, ProiezioniPerData } from '@/types/proiezione'
 
-//TODO SEPARARE DATA E ORARIO SEMPLIFICHEREBBE QUESTO CODICE E SAREBBE PIÙ MANUTENIBILE.
+//SEPARARE DATA E ORARIO SEMPLIFICHEREBBE QUESTO CODICE E SAREBBE PIÙ MANUTENIBILE.
 
 //questa funzione deve raggruppare tutti gli orari delle proiezioni dello stesso giorno
 //quindi le metto in un oggetto che ha come chiave la data
-export const raggruppaDate = (proiezioni: Proiezione[]): ProiezioniRaggruppate => {
+export const raggruppaDate = (proiezioni: Proiezione[]) => {
 
-    const proiezioniRaggruppate: ProiezioniRaggruppate = {};
+    const proiezioniRaggruppate: ProiezioniPerData = {};
 
     proiezioni.forEach(datiProiezione => {
         //siccome io ho un campo DateTime avrebbe un formato del tipo: 2000-10-31T01:30:00.000-05:00

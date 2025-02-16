@@ -1,14 +1,19 @@
-interface base{
+interface base {
     id: number
     titolo: string
     url_copertina: string
 }
 
-export interface Film extends base{
+export interface Film extends base {
     generi: string[]
     regista: string
     durata: number
     descrizione?: string
+}
+
+// Changed to only require films array
+export interface HeroHomepageProps {
+    films: Film[]
 }
 
 export interface MovieDetailsProps {
@@ -19,23 +24,21 @@ export interface MovieDetailsProps {
 }
 
 export interface DettagliProps {
-    film: Film;
+    film: Film
 }
 
 export interface HeroDettagli extends DettagliProps {
-    onAcquista?: () => void;
+    onAcquista?: () => void
 }
 
-export type HeroHomepage = base
-
 export interface MovieInfoProps {
-    titolo: string;
-    sala: string;
-    data_ora: string;
+    titolo: string
+    sala: string
+    data_ora: string
 }
 
 export interface SinossiProps {
-    descrizione: string;
+    descrizione: string
 }
 
 export interface CopertinaProps {

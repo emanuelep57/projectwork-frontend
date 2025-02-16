@@ -6,7 +6,7 @@ import {LoginFormProps} from "@/types/auth.ts";
 
 
 
-//componente che gestisce il form del login
+//componente che gestisce il form del login, la validazione sui campi viene fatta con react-hook-form
 const FormLogin = ({ onSubmit, errori, registra }: LoginFormProps) => (
     <form onSubmit={onSubmit} className="grid gap-4">
         <FormError errori={errori} />

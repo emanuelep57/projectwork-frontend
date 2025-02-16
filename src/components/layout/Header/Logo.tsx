@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+//semplice sezione con il logo ed il titolo sulla navbar
 export const Logo = () => (
     <div className="flex items-center space-x-3 group cursor-pointer">
         <Avatar>

@@ -3,6 +3,7 @@ import { format, parseISO } from "date-fns";
 import {SelezioneOrarioProps} from "@/types/proiezione";
 import { Button } from "@/components/ui/button";
 
+//Sezione dove si seleziona l'orario del film sulla sidebar
 export const SelezioneOrario = ({proiezioni, onSelezionaOrario}: SelezioneOrarioProps) => {
     return (
         <div className="space-y-4">

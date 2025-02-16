@@ -1,9 +1,9 @@
-import { Badge } from "@/components/ui/badge"; // Componente per etichette (badge)
-import { Button } from "@/components/ui/button"; // Componente per bottoni
-import {HeroDettagli} from "@/types/film"; // Tipo personalizzato per i film
-import { Dettagli } from "@/components/film/DettagliFilm/Dettagli.tsx"; // Componente per i metadati del film
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {HeroDettagli} from "@/types/film";
+import { Dettagli } from "@/components/film/DettagliFilm/Dettagli.tsx";
 
-
+//immagine che costituisce la Hero section della pagina
 export const Hero = ({ film, onAcquista }: HeroDettagli) => {
     return (
         <div className="h-[70vh] relative">
@@ -46,7 +46,7 @@ export const Hero = ({ film, onAcquista }: HeroDettagli) => {
                     <Button
                         size="lg"
                         className="font-semibold md:hidden bg-primary hover:bg-primary/90"
-                        onClick={onAcquista} // Callback al clic
+                        onClick={onAcquista} // Callback al click
                     >
                         Acquista Biglietti
                     </Button>

@@ -3,6 +3,7 @@ import { Film } from "@/types/film.ts";
 const API_BASE_URL = 'http://localhost:5000/api/films';
 
 export const filmAPI = {
+
     // Metodo per ottenere tutti i film
     async fetchFilms(): Promise<Film[]> {
         const response = await fetch(`${API_BASE_URL}`);

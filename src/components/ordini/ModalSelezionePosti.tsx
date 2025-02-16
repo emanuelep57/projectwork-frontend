@@ -1,5 +1,5 @@
-import {Ordine} from '@/types/ordine';
-import {Posto} from '@/types/posto';
+import {ModalSelezionePostiProps } from '@/types/ordine';
+import {PostoSelezionato} from '@/types/posto';
 import {Button} from '@/components/ui/button';
 import {
     Dialog,
@@ -13,27 +13,6 @@ import {Alert, AlertDescription} from '@/components/ui/alert';
 import {GrigliaPosti} from '@/components/posto/GrigliaPosti';
 import {LegendaPosti} from '@/components/posto/LegendaPosti';
 
-
-interface ModalSelezionePostiProps {
-    isAperto: boolean;
-    onChiudi: () => void;
-    ordineSelezionato: Ordine | null;
-    postiDisponibili: Posto[];
-    postiOccupati: Posto[];
-    postiSelezionati: number[];
-    errore: string | null;
-    onTogglePosto: (idPosto: number) => void;
-    onConferma: () => Promise<void>;
-    isCambioProiezione?: boolean;
-}
-
-// Prima definiamo l'interfaccia che ci serve
-interface PostoSelezionato {
-    etichetta: string;
-    id: number;
-    fila: string;
-    numero: number;
-}
 
 //praticamente riutilizzo la griglia dei posti mettendola in un modal, calcolando le dimensioni per farla rientrare
 //e dal modal l'utente può cambiare i propri posti.

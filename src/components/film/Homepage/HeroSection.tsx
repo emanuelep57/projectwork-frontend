@@ -5,10 +5,10 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 import {useNavigate} from "react-router-dom";
-import {Film, HeroProps} from "@/types/film.ts";
+import {Film, HeroHomepageProps} from "@/types/film.ts";
 
 
-const HeroSection = ({films} : HeroProps) => {
+const HeroSection = ({films} : HeroHomepageProps) => {
 
     const navigate = useNavigate()
 

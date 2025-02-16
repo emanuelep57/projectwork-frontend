@@ -7,6 +7,15 @@ export interface Proiezione {
     costo?: number;
 }
 
+export interface ProiezioneTitolo {
+    id: number;
+    film_id: number;
+    film_titolo: string;
+    data_ora: string;
+    costo: number;
+}
+
+
 export interface ProiezioniPerData {
     [data: string]: Proiezione[];
 }

@@ -1,30 +1,23 @@
-import {useState, useCallback} from 'react';
+import {useState} from 'react';
 import {useOrdini} from '@/hooks/useOrdini';
 import {SchedaOrdine} from '@/components/ordini/SchedaOrdine';
+import {ModificaOrdine} from '@/components/ordini/ModificaOrdine';
 import {ModalModifica} from '@/components/ordini/ModalModifica';
 import {ModalSelezionePosti} from '@/components/ordini/ModalSelezionePosti';
 import {Ordine} from '@/types/ordine';
 import {Posto} from '@/types/posto';
 import {Proiezione} from '@/types/proiezione';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import {ordineAPI} from '@/services/ordini';
 import {toast} from '@/hooks/use-toast';
-import Header from "@/components/layout/Header/Header.tsx";
+import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer";
 
-/**
- * Pagina che gestisce la visualizzazione e modifica dei biglietti dell'utente
- * Permette di:
- * - Visualizzare biglietti per spettacoli futuri e passati
- * - Modificare data/ora della proiezione
- * - Modificare i posti selezionati
- * - Eliminare ordini
- */
 const PaginaBigliettiUtente = () => {
     const {ordiniFuturi, ordiniPassati, inCaricamento, errore, fetchOrdini, eliminaOrdine} = useOrdini();
 
     // Stati per la gestione dell'ordine
     const [ordineSelezionato, setOrdineSelezionato] = useState<Ordine | null>(null);
+    const [modalModificaAperta, setModalModificaAperta] = useState(false);
     const [proiezioniDisponibili, setProiezioniDisponibili] = useState<Proiezione[]>([]);
     const [proiezioneTemporanea, setProiezioneTemporanea] = useState<string>("");
 
@@ -53,17 +46,32 @@ const PaginaBigliettiUtente = () => {
             }
 
             const dati = await risposta.json();
-
-            if (!Array.isArray(dati)) {
-                throw new Error('Dati proiezioni non validi');
-            }
-
             setProiezioniDisponibili(dati);
         } catch (error) {
-            console.error(error);
             toast({
                 title: "Errore",
-                description: "Impossibile caricare le proiezioni disponibili",
+                description: "Impossibile caricare le proiezioni disponibili"+error,
+                variant: "destructive"
+            });
+        }
+    };
+
+    const gestisciEliminaOrdine = async (id: number) => {
+        try {
+            // Chiama la funzione di eliminazione
+            await eliminaOrdine(id);
+            // Aggiorna i dati
+            await fetchOrdini();
+            // Mostra un toast di successo
+            toast({
+                title: "Successo",
+                description: "Ordine eliminato con successo"
+            });
+        } catch (error) {
+            // Gestisci l'errore
+            toast({
+                title: "Errore"+error,
+                description: "Impossibile eliminare l'ordine",
                 variant: "destructive"
             });
         }
@@ -102,9 +110,30 @@ const PaginaBigliettiUtente = () => {
     };
 
     /**
-     * Gestisce la modifica di un ordine (cambio proiezione)
+     * Gestisce l'apertura della modale di modifica ordine
      */
     const gestisciModificaOrdine = async (ordine: Ordine) => {
+        setOrdineSelezionato(ordine);
+        setModalModificaAperta(true);
+    };
+
+    /**
+     * Gestisce il successo della modifica dell'ordine
+     */
+    const gestisciSuccessoModifica = async () => {
+        await fetchOrdini();
+        setModalModificaAperta(false);
+        setOrdineSelezionato(null);
+        toast({
+            title: "Successo",
+            description: "Ordine modificato con successo"
+        });
+    };
+
+    /**
+     * Gestisce la modifica dei posti per un cambio proiezione
+     */
+    const gestisciModificaProiezione = async (ordine: Ordine) => {
         setOrdineSelezionato(ordine);
         setProiezioneTemporanea("");
         setErroreSelezionePosti(null);
@@ -113,7 +142,7 @@ const PaginaBigliettiUtente = () => {
     };
 
     /**
-     * Gestisce la modifica dei posti per un ordine
+     * Gestisce la modifica dei soli posti
      */
     const gestisciModificaPosti = async (ordine: Ordine) => {
         setOrdineSelezionato(ordine);
@@ -136,126 +165,7 @@ const PaginaBigliettiUtente = () => {
         setDialogoPostiAperto(true);
     };
 
-    /**
-     * Gestisce il cambio sia della proiezione che dei posti
-     */
-    const gestisciCambioProiezioneEPosti = async () => {
-        if (!ordineSelezionato || !proiezioneTemporanea || postiSelezionati.length === 0) return;
-
-        if (postiSelezionati.length !== ordineSelezionato.biglietti.length) {
-            setErroreSelezionePosti(`Seleziona esattamente ${ordineSelezionato.biglietti.length} posti`);
-            return;
-        }
-
-        const postiFormattati = postiSelezionati.map(posto => ({ id_posto: posto}));
-
-
-        console.log("Payload inviato:", JSON.stringify({
-            order_id: ordineSelezionato.id,
-            new_projection_id: parseInt(proiezioneTemporanea),
-            new_seats: postiFormattati
-        }, null, 2));
-
-
-        try {
-            await ordineAPI.cambiaDataProiezione({
-                id_ordine: ordineSelezionato.id,
-                id_nuova_proiezione: parseInt(proiezioneTemporanea),
-                nuovi_posti: postiFormattati
-            });
-
-            toast({
-                title: "Successo",
-                description: "Orario spettacolo e posti modificati con successo"
-            });
-
-            await fetchOrdini();
-            gestisciChiusuraDialoghi();
-        } catch (errore) {
-            setErroreSelezionePosti(errore instanceof Error ? errore.message : 'Impossibile cambiare orario e posti');
-            toast({
-                title: "Errore",
-                description: errore instanceof Error ? errore.message : 'Impossibile cambiare orario e posti',
-                variant: "destructive"
-            });
-        }
-    };
-
-    /**
-     * Gestisce il cambio dei soli posti
-     */
-    const gestisciCambioPosti = async () => {
-        if (!ordineSelezionato || postiSelezionati.length === 0) return;
-
-        if (postiSelezionati.length !== ordineSelezionato.biglietti.length) {
-            setErroreSelezionePosti(`Seleziona esattamente ${ordineSelezionato.biglietti.length} posti`);
-            return;
-        }
-
-        try {
-            await ordineAPI.cambiaPosto({
-                id_ordine: ordineSelezionato.id,
-                nuovi_posti: postiSelezionati.map(id => ({ id_posto: id }))
-            });
-
-            toast({
-                title: "Successo",
-                description: "Posti modificati con successo"
-            });
-
-            await fetchOrdini();
-            gestisciChiusuraDialoghi();
-        } catch (errore) {
-            setErroreSelezionePosti(errore instanceof Error ? errore.message : 'Impossibile cambiare i posti');
-            toast({
-                title: "Errore",
-                description: errore instanceof Error ? errore.message : 'Impossibile cambiare i posti',
-                variant: "destructive"
-            });
-        }
-    };
-
-    /**
-     * Gestisce la selezione/deselezione di un posto
-     */
-    const gestisciTogglePosto = useCallback((idPosto: number) => {
-        setErroreSelezionePosti(null);
-
-        const postoOccupato = postiOccupati.some(p => p.id === idPosto) &&
-            !ordineSelezionato?.biglietti.some(b =>
-                b.posti.some(p => p.id === idPosto) // Ora controlla nell'array `posti`
-            );
-
-        if (postoOccupato) {
-            setErroreSelezionePosti("Questo posto è già occupato");
-            return;
-        }
-
-        setPostiSelezionati(prev => {
-            if (prev.includes(idPosto)) {
-                return prev.filter(id => id !== idPosto);
-            } else if (prev.length < ordineSelezionato?.biglietti.length!) {
-                return [...prev, idPosto];
-            } else {
-                setErroreSelezionePosti(`Puoi selezionare solo ${ordineSelezionato?.biglietti.length} posti`);
-                return prev;
-            }
-        });
-    }, [postiOccupati, ordineSelezionato?.biglietti]);
-
-    /**
-     * Chiude tutti i dialoghi e resetta gli stati
-     */
-    const gestisciChiusuraDialoghi = useCallback(() => {
-        setDialogoPostiAperto(false);
-        setDialogoProiezioneAperto(false);
-        setPostiSelezionati([]);
-        setProiezioneTemporanea("");
-        setErroreSelezionePosti(null);
-        setOrdineSelezionato(null);
-    }, []);
-
-    // Stati di caricamento e errore
+    // Gestione stati di caricamento e errore
     if (inCaricamento) {
         return (
             <div className="container mx-auto p-6 text-center">
@@ -276,12 +186,23 @@ const PaginaBigliettiUtente = () => {
     }
 
     return (
-
         <div className="min-h-screen flex flex-col">
             <Header/>
             <div className="flex-1 container mx-auto p-6">
                 <h1 className="text-3xl font-bold mb-6">I Miei Biglietti</h1>
 
+                {/* Modal per la modifica dell'ordine (aggiunta/rimozione posti) */}
+                {ordineSelezionato && (
+                    <ModificaOrdine
+                        ordine={ordineSelezionato}
+                        isOpen={modalModificaAperta}
+                        onClose={() => {setModalModificaAperta(false);
+                                               setOrdineSelezionato(null) }}
+                        onSuccess={gestisciSuccessoModifica}
+                    />
+                )}
+
+                {/* Modal per il cambio proiezione */}
                 <ModalModifica
                     isOpen={dialogoProiezioneAperto}
                     onClose={() => setDialogoProiezioneAperto(false)}
@@ -292,6 +213,7 @@ const PaginaBigliettiUtente = () => {
                     onConferma={gestisciConfermaProiezione}
                 />
 
+                {/* Modal per la selezione dei posti */}
                 <ModalSelezionePosti
                     isAperto={dialogoPostiAperto}
                     onChiudi={() => setDialogoPostiAperto(false)}
@@ -300,9 +222,14 @@ const PaginaBigliettiUtente = () => {
                     postiOccupati={postiOccupati}
                     postiSelezionati={postiSelezionati}
                     errore={erroreSelezionePosti}
-                    onTogglePosto={gestisciTogglePosto}
-                    onConferma={proiezioneTemporanea ? gestisciCambioProiezioneEPosti : gestisciCambioPosti}
-                    isCambioProiezione={!!proiezioneTemporanea}
+                    onTogglePosto={(idPosto) => {
+                        setPostiSelezionati(prev =>
+                            prev.includes(idPosto)
+                                ? prev.filter(id => id !== idPosto)
+                                : [...prev, idPosto]
+                        );
+                    }}
+                    onConferma={(ordine) => gestisciModificaPosti(ordine)}
                 />
 
                 <Tabs defaultValue="future">
@@ -322,9 +249,9 @@ const PaginaBigliettiUtente = () => {
                                     key={ordine.id}
                                     ordine={ordine}
                                     isOrdineFuturo={true}
-                                    onModificaPosti={gestisciModificaPosti}
-                                    onModificaOrdine={gestisciModificaOrdine}
-                                    onEliminaOrdine={eliminaOrdine}
+                                    onModificaPosti={() => gestisciModificaOrdine(ordine)}
+                                    onModificaOrdine={() => gestisciModificaProiezione(ordine)}
+                                    onEliminaOrdine={gestisciEliminaOrdine}
                                 />
                             ))
                         )}
@@ -341,9 +268,9 @@ const PaginaBigliettiUtente = () => {
                                     key={ordine.id}
                                     ordine={ordine}
                                     isOrdineFuturo={false}
-                                    onModificaPosti={gestisciModificaPosti}
-                                    onModificaOrdine={gestisciModificaOrdine}
-                                    onEliminaOrdine={eliminaOrdine}
+                                    onModificaPosti={() => gestisciModificaOrdine(ordine)}
+                                    onModificaOrdine={() => gestisciModificaProiezione(ordine)}
+                                    onEliminaOrdine={gestisciEliminaOrdine}
                                 />
                             ))
                         )}

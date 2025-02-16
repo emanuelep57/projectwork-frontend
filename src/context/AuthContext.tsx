@@ -53,9 +53,9 @@ export const ProviderAutenticazione = ({ children }: { children: ReactNode }) =>
         }
     };
 
-    //funzione per la registrazione
+    //funzione per la registrazione, quando l'utente si registra in automatico poi viene loggato.
     const registra = async (datiUtente: DatiRegistrazioneRequest) => {
-        const risposta = await fetch('http://localhost:5000/api/auth/register', {
+        const risposta = await fetch('http://localhost:5000/api/auth/registrazione', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,8 +69,7 @@ export const ProviderAutenticazione = ({ children }: { children: ReactNode }) =>
             throw new Error(errore.error);
         }
 
-        const dati = await risposta.json();
-        setUtente(dati.user);
+        await accedi(datiUtente.email, datiUtente.password);
     };
 
     //funzione per il logout

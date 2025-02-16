@@ -101,7 +101,7 @@ const Prenota = () => {
                                     disabled={postiSelezionati.length === 0 || isProcessing}
                                 >
                                     <ShoppingCart className="w-5 h-5 mr-2"/>
-                                    {isProcessing ? 'Processing...' : `Checkout (${postiSelezionati.length} seats)`}
+                                    {isProcessing ? 'Processando...' : `Checkout (${postiSelezionati.length} Posti)`}
                                 </Button>
                             </SheetTrigger>
                             <SheetContent

@@ -1,6 +1,8 @@
 import {Clock, Film, MapPin} from "lucide-react";
 import {MovieInfoProps} from "@/types/film.ts";
 
+//Va a comporre il banner superiore, sotto la navbar dove scrivo
+//il titolo del film che sta comprando, l'orario e la data e la sala.
 export const MovieInfo= ({ titolo, sala, data_ora }: MovieInfoProps) => (
     <div className="bg-muted/5 border-b border-border">
         <div className="container mx-auto py-4 px-6">

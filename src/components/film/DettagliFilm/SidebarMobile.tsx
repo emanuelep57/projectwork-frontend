@@ -1,12 +1,11 @@
-//TODO IMPLEMENTA DESCRIZIONE 
-
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { X } from "lucide-react";
 import { SelezioneOrario } from "@/components/film/DettagliFilm/SelezioneOrario.tsx";
 import {SidebarMobileProps} from "@/types/proiezione";
-import { Button } from "@/components/ui/button";
 import { SelezioneData } from "@/components/film/DettagliFilm/SelezioneData.tsx";
 
+
+//sidebar mobile che in realtà è uno sheet che si apre dal basso per essere più comoda
+//mi mostra i giorni e gli orari con un menù che poi scorro in orizzontale
 export const SidebarMobile = ({aperto, onCambiaStatoAperto, dateDisponibili, dataSelezionata,
                                   proiezioni, onSelezionaData, onSelezionaOrario,}: SidebarMobileProps) => {
     return (
@@ -17,14 +16,6 @@ export const SidebarMobile = ({aperto, onCambiaStatoAperto, dateDisponibili, dat
                 <SheetHeader className="p-6 border-b">
                     <SheetTitle className="flex items-center justify-between">
                         <span>Acquista Biglietti</span>
-                        {/* Pulsante per chiudere il pannello */}
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => onCambiaStatoAperto(false)}
-                        >
-                            <X className="h-4 w-4" />
-                        </Button>
                     </SheetTitle>
                 </SheetHeader>
 

@@ -1,7 +1,6 @@
-//SInossi del film
-
 import {SinossiProps} from "@/types/film.ts";
 
+//Semplice componente che mostra la sinossi del film
 export const Sinossi = ({ descrizione }: SinossiProps) => {
     return (
         <div className="container mx-auto max-w-6xl px-8 py-12">

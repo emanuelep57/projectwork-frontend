@@ -14,16 +14,10 @@ export interface IconaPostoProps {
     occupato?: boolean;
 }
 
-
-export interface RiepilogoOrdineProps {
-    vistaMobile?: boolean;
-    postiSelezionati: PostoSelezionato[];
-    onIndietro: () => void;
-    onConferma: (dettagliOspiti: {[chiave: string]: { nome: string; cognome: string }}) => void
-    isProcessing: boolean;
-    costo: number;
+export interface PostoUtente extends Posto {
+    nome_ospite: string | null;
+    cognome_ospite: string | null;
 }
-
 
 export interface GrigliaPostiProps {
     file: string[];

@@ -35,7 +35,7 @@ export const useAutenticazione = (onSuccess: () => void, onOpenChange: (open: bo
             onSuccess?.();
             onOpenChange?.(false);
         } catch (error) {
-            setErroreApi(error instanceof Error ? error.message : 'An error occurred during login');
+            setErroreApi(error instanceof Error ? error.message : 'Si è verificato un errore durante il login');
         }
     };
 
@@ -53,8 +53,7 @@ export const useAutenticazione = (onSuccess: () => void, onOpenChange: (open: bo
             onSuccess?.();
             onOpenChange?.(false);
         } catch (error) {
-            console.error('Signup error:', error);
-            setErroreApi(error instanceof Error ? error.message : 'An error occurred during registration');
+            setErroreApi(error instanceof Error ? error.message : 'Si è verificato un errore durante la registrazione');
         }
     };
 

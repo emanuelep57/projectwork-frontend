@@ -45,6 +45,8 @@ const ModaleAutenticazione = ({
             <DialogContent className="max-w-md bg-background p-0 border-border overflow-hidden sm:rounded-xl">
                 <Tabs defaultValue={tabIniziale} className="w-full">
                     <TabsList className="grid w-full grid-cols-[1fr_1fr_auto] bg-background">
+
+                        {/*questi sono i trigger delle tab, ovvero i bottoni che si clicca per cambiare tab nel modal */}
                         <TabsTrigger
                             value="login"
                             className="data-[state=active]:bg-primary/85 data-[state=active]:text-secondary"
@@ -62,6 +64,7 @@ const ModaleAutenticazione = ({
                         </DialogClose>
                     </TabsList>
 
+                    {/*se ci sono errori li mostro, poi sotto ho le due tab del login e signup*/}
                     {erroreApi && <FormError errori={{api: {message: erroreApi}}}/>}
 
                     <TabsContent value="login" className="p-6">

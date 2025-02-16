@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { ShoppingCart } from "lucide-react";
-import { RiepilogoOrdineProps } from "@/types/posto.ts";
+import { RiepilogoOrdineProps } from "@/types/ordine.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { calcolaCosto } from '@/utils/calcoloCosto';
 
+//Il riepilogo dell'ordine che si trova sulla sidebar a destra dove ci sono la lista dei costi ed il prezzo
 export const Riepilogo = ({
                                     postiSelezionati,
                                     costo,

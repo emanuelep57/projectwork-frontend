@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {RegistrazioneProps} from "@/types/auth.ts";
 
-
+//componente che gestisce il form del signup, la validazione sui campi viene fatta con react-hook-form
 const FormRegistrazione = ({ onSubmit, errori, registra, getValori }: RegistrazioneProps) => (
     <form onSubmit={onSubmit} className="grid gap-4">
         <FormError errori={errori} />
@@ -53,7 +53,7 @@ const FormRegistrazione = ({ onSubmit, errori, registra, getValori }: Registrazi
                 id="signupPassword"
                 type="password"
                 {...registra("password", {
-                    required: "Password is required",
+                    required: "La password è obbligatoria",
                     minLength: {
                         value: 8,
                         message: "La password deve essere lunga almeno 8 caratteri"
@@ -68,7 +68,7 @@ const FormRegistrazione = ({ onSubmit, errori, registra, getValori }: Registrazi
                 id="confermaPassword"
                 type="password"
                 {...registra("confermaPassword", {
-                    required: "Password confirmation is required",
+                    required: "La password di conferma è obbligatoria",
                     validate: value =>
                         value === getValori("password") || "Le password non coincidono"
                 })}

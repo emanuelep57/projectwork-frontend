@@ -4,6 +4,7 @@ import { Logo } from './Logo';
 import {SezioneNavLink} from './SezioneNavLink';
 import {SezioneUtente} from './SezioneUtente';
 
+//Header (navbar) del sito
 const Header = () => {
     return (
         <header className="w-full bg-background border-b border-border sticky">
@@ -40,7 +41,7 @@ const Header = () => {
                     </div>
                 </div>
 
-                {/* Navigation desktop */}
+                {/* Navigazione desktop */}
                 <nav className="hidden lg:flex items-center justify-center py-3 border-t border-border">
                     <div className="flex items-center space-x-8">
                         <SezioneNavLink />

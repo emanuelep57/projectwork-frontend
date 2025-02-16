@@ -1,11 +1,9 @@
-// Barra laterale (sidebar) che contiene le sezioni per la selezione di data e orario.
-// L'utente può scegliere una data e un orario per essere indirizzato alla pagina di acquisto.
-
 import { SelezioneOrario } from "@/components/film/DettagliFilm/SelezioneOrario.tsx";
 import { SelezioneData } from "@/components/film/DettagliFilm/SelezioneData.tsx";
 import {SidebarProps} from "@/types/proiezione.ts";
 
-
+// Barra laterale (sidebar) che contiene le sezioni per la selezione di data e orario.
+// L'utente può scegliere una data e un orario per essere indirizzato alla pagina di acquisto.
 export const Sidebar = ({dateDisponibili, dataSelezionata, proiezioni, onSelezionaData, onSelezionaOrario}: SidebarProps) => {
     return (
         // Container principale.

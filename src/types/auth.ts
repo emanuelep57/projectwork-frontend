@@ -8,6 +8,7 @@ export interface base {
 
 export interface Utente extends base {
     id: number;
+    cognome: string;
 }
 
 // Interfaccia per la registrazione nel modal

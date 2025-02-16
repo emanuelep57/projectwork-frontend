@@ -38,7 +38,7 @@ export const SezioneUtente = ({ vistaMobile }: { vistaMobile?: boolean }) => {
         );
     }
 
-    // Per desktop, mostra il pulsante completo
+    // Per desktop, sempre per utenti non autenticati, mostra il pulsante completo
     return (
         <AuthModal>
             <Button

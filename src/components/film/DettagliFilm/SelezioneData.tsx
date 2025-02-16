@@ -4,6 +4,7 @@ import { CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {SelezioneDataProps} from "@/types/proiezione.ts";
 
+//Componente che si occupa di mostrare le varie date disponibili per il film
 // - Mobile: le date vengono mostrare in un menù scorrevole orizzontalmente
 // - Desktop: Le date vengono mostrate in un elenco verticale
 export const SelezioneData = ({dateDisponibili, dataSelezionata, onSelezionaData, vistaMobile = false}: SelezioneDataProps) => {

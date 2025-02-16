@@ -1,5 +1,6 @@
 import {MovieDetailsProps} from "@/types/film.ts";
 
+//semplice componente con dettagli minimi riguardo generi, regia e durata
 export const DettagliFilm = ({titolo, generi, regista, durata}: MovieDetailsProps) => {
     return (
         <div>

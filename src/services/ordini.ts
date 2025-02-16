@@ -1,9 +1,8 @@
-import { Ordine, RichiestaAggiornamentoOrdine, RichiestaCambioPosto } from '@/types/ordine';
+import {AggiungiBigliettiResponse, Ordine} from '@/types/ordine';
 
 const BASE_URL = 'http://localhost:5000/api/ordini';
 
 export const ordineAPI = {
-    //TODO IMPLEMENTARE (DA BACKEND E RICHIAMARE QUI) UN ENDPOINT PER ELIMINARE DEI POSTI O AGGIUNGERNE.
 
     //funzione che effettua il fetch degli ordini dell'utente
     async fetchOrdini(): Promise<Ordine[]> {
@@ -31,35 +30,41 @@ export const ordineAPI = {
         }
     },
 
-    //funzione per cambiare sia la data della proiezione sia il posto, perché se si cambia data bisogna scegliere per forza un nuovo posto.
-    async cambiaDataProiezione(data: RichiestaAggiornamentoOrdine): Promise<void> {
-        const response = await fetch(`${BASE_URL}/change-projection-and-seats`, {
+    async rimuoviPosto(ordineId: number, idPosto: number): Promise<void> {
+        const response = await fetch(`${BASE_URL}/${ordineId}/rimuovi-posto`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
-            body: JSON.stringify(data)
+            body: JSON.stringify({ idPosto })
         });
 
         if (!response.ok) {
-            throw new Error(`Non è stato possibile modificare la prenotazione ${response.status} ${response.statusText}`);
+            const errorText = await response.text();
+            throw new Error(`Impossibile rimuovere il posto: ${errorText}`);
         }
     },
 
-    //funziona invece per cambiare solo il posto
-    async cambiaPosto(data: RichiestaCambioPosto): Promise<void> {
-        const response = await fetch(`${BASE_URL}/change-seats`, {
+    async aggiungiBigliettiAOrdine(ordineId: number, biglietti: {
+        id_posto: number,
+        nome_ospite?: string,
+        cognome_ospite?: string
+    }[]): Promise<AggiungiBigliettiResponse> {
+        const response = await fetch(`${BASE_URL}/${ordineId}/aggiungi-posto`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
-            body: JSON.stringify(data)
+            body: JSON.stringify({ biglietti })
         });
 
         if (!response.ok) {
-            throw new Error(`Non è stato possibile modificare la prenotazione ${response.status} ${response.statusText}`);
+            const errorText = await response.text();
+            throw new Error(`Impossibile aggiungere i biglietti: ${errorText}`);
         }
+
+        return response.json();
     }
 };

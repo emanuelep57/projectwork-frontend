@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer"
 import HeroSection from "@/components/film/Homepage/HeroSection.tsx"
 import MoviesCarousel from "@/components/film/Homepage/SezioneOrari/SezioneOrari.tsx"
 import {filmAPI} from "@/services/films.ts";
-import type {Film, HeroHomepage} from "../types/film"
+import type {Film} from "../types/film"
 
 const CinemaHomepage = () => {
     const [films, setFilms] = useState<Film[]>([])
@@ -77,18 +77,11 @@ const CinemaHomepage = () => {
         )
     }
 
-    // Transformo i dati in modo che siano fruibili per il componente HeroSection
-    const heroData: HeroHomepage[] = films.map(({titolo, url_copertina, id}) => ({
-        titolo,
-        url_copertina,
-        id
-    }));
-
     return (
         <div className="min-h-screen bg-black text-white">
             <Header/>
             <main>
-                <HeroSection films={heroData}/>
+                <HeroSection films={films}/>
                 <section className="py-16 md:py-24">
                     <div className="container mx-auto px-4">
                         <MoviesCarousel films={films}/>

@@ -1,5 +1,6 @@
 import {NavLink} from './NavLink';
 
+//sezione con tutti i link sulla navbar
 export const SezioneNavLink = ({vistaMobile}: { vistaMobile?: boolean }) => (
     <>
         <NavLink href="/" vistaMobile={vistaMobile}>Home</NavLink>
