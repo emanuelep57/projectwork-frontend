@@ -1,4 +1,4 @@
-import {Posto, PostoUtente} from "@/types/posto.ts";
+import {PostoUtente} from "@/types/posto.ts";
 
 export interface Biglietto {
     id_biglietto: number;
@@ -11,9 +11,8 @@ export interface Biglietto {
     cognome_titolare?: string;
 }
 
+// First, let's update the BigliettoOrdine interface in ordine.ts
 export interface BigliettoOrdine {
-    id: number;
-    posti:Array<Posto>;
-    nome_ospite?: string;
-    cognome_ospite?: string;
+    id_biglietto: number;
+    posti: PostoUtente[]; // Change this from Posto[] to PostoUtente[]
 }

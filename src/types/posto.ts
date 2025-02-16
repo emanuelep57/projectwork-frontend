@@ -1,4 +1,3 @@
-// types/seat.ts
 export interface Posto {
     id: number;
     fila: string;
@@ -9,15 +8,16 @@ export interface PostoSelezionato extends Posto {
     etichetta: string;
 }
 
+export interface PostoUtente extends Posto {
+    nome_ospite: string | null;
+    cognome_ospite: string | null;
+}
+
 export interface IconaPostoProps {
     selezionato?: boolean;
     occupato?: boolean;
 }
 
-export interface PostoUtente extends Posto {
-    nome_ospite: string | null;
-    cognome_ospite: string | null;
-}
 
 export interface GrigliaPostiProps {
     file: string[];

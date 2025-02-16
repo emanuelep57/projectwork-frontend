@@ -110,7 +110,7 @@ export const ModalSelezionePosti = ({
                         Annulla
                     </Button>
                     <Button
-                        onClick={onConferma}
+                        onClick={() => ordineSelezionato && onConferma(ordineSelezionato)}
                         disabled={postiSelezionati.length !== ordineSelezionato?.biglietti.length}
                     >
                         {isCambioProiezione ? 'Conferma Modifiche' : 'Aggiorna Posti'}

@@ -70,7 +70,7 @@ const PaginaBigliettiUtente = () => {
         } catch (error) {
             // Gestisci l'errore
             toast({
-                title: "Errore"+error,
+                title: "Errore" + error,
                 description: "Impossibile eliminare l'ordine",
                 variant: "destructive"
             });
@@ -229,7 +229,7 @@ const PaginaBigliettiUtente = () => {
                                 : [...prev, idPosto]
                         );
                     }}
-                    onConferma={(ordine) => gestisciModificaPosti(ordine)}
+                    onConferma={gestisciModificaPosti}
                 />
 
                 <Tabs defaultValue="future">

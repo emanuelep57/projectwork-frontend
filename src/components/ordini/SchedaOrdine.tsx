@@ -13,8 +13,30 @@ import {
 import { Clock, CalendarDays, Users, MoreVertical, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { it } from 'date-fns/locale';
-import {useAuth} from "@/context/AuthContext.tsx";
-import {SchedaOrdineProps} from "@/types/ordine.ts";
+import { useAuth } from "@/context/AuthContext";
+import { BigliettoOrdine } from "@/types/ordine";
+import { PostoUtente } from "@/types/posto";
+
+interface Proiezione {
+    data_ora: string;
+    film_titolo: string;
+}
+
+interface Ordine {
+    id: number;
+    data_acquisto: string;
+    proiezione: Proiezione;
+    biglietti: BigliettoOrdine[];
+    pdf_url?: string;
+}
+
+export interface SchedaOrdineProps {
+    ordine: Ordine;
+    isOrdineFuturo: boolean;
+    onModificaPosti: (ordine: Ordine) => void;
+    onModificaOrdine: (ordine: Ordine) => void;
+    onEliminaOrdine: (id: number) => void;
+}
 
 export const SchedaOrdine = ({
                                  ordine,
@@ -24,25 +46,23 @@ export const SchedaOrdine = ({
                                  onEliminaOrdine
                              }: SchedaOrdineProps) => {
     const [dialogoEliminaAperto, setDialogoEliminaAperto] = React.useState(false);
+    const { utente } = useAuth();
 
-    const { utente} = useAuth();
-
-    // Formatta la data dello spettacolo
     const dataSpettacolo = format(parseISO(ordine.proiezione.data_ora), 'EEEE d MMMM yyyy', { locale: it });
     const oraSpettacolo = format(parseISO(ordine.proiezione.data_ora), 'HH:mm');
     const dataAcquisto = format(parseISO(ordine.data_acquisto), 'd MMMM yyyy', { locale: it });
 
-    // Conta il numero totale di posti
     const numeroTotalePosti = ordine.biglietti.reduce((acc, biglietto) => acc + biglietto.posti.length, 0);
 
-    // Trova il primo posto non assegnato a un ospite (presumibilmente del titolare)
-    const postoTitolare = ordine.biglietti[0]?.posti.find(posto => !posto.nome_ospite);
+
+    const postoTitolare = ordine.biglietti[0]?.posti.find(
+        (posto): posto is PostoUtente => 'nome_ospite' in posto && posto.nome_ospite === null
+    );
 
     return (
         <Card className="mb-4 hover:shadow-md transition-shadow">
             <CardContent className="p-6">
                 <div className="flex justify-between items-start">
-                    {/* Informazioni principali */}
                     <div className="space-y-4">
                         <div>
                             <h3 className="text-2xl font-bold">{ordine.proiezione.film_titolo}</h3>
@@ -74,11 +94,9 @@ export const SchedaOrdine = ({
                             )}
                         </div>
 
-                        {/* Lista posti */}
                         <div className="space-y-2">
                             <h4 className="font-medium">Dettaglio posti:</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                {/* Mostra prima il posto del titolare */}
                                 {postoTitolare && (
                                     <div className="flex items-center gap-2">
                                         <span className="text-muted-foreground font-medium">
@@ -86,7 +104,7 @@ export const SchedaOrdine = ({
                                         </span>
                                         <span>
                                             {utente
-                                                ? `${utente?.nome} ${utente?.cognome}`
+                                                ? `${utente.nome} ${utente.cognome}`
                                                 : 'Non specificato'}
                                         </span>
                                         <span className="text-muted-foreground">
@@ -95,12 +113,12 @@ export const SchedaOrdine = ({
                                     </div>
                                 )}
 
-                                {/* Mostra i posti degli ospiti */}
                                 {ordine.biglietti.map((biglietto) => (
                                     biglietto.posti
-                                        .filter(posto => posto.nome_ospite) // Mostra solo i posti degli ospiti
-                                        .map((posto) => (
-                                            <div key={`${biglietto.id_biglietto}-${posto.id}`} className="flex items-center gap-2">
+                                    .filter((posto): posto is PostoUtente => 'nome_ospite' in posto && posto.nome_ospite !== null)
+                                    .map((posto) => (
+                                            <div key={`${biglietto.id_biglietto}-${posto.id}`}
+                                                 className="flex items-center gap-2">
                                                 <span className="text-muted-foreground">
                                                     Ospite:
                                                 </span>
@@ -119,7 +137,6 @@ export const SchedaOrdine = ({
                         </div>
                     </div>
 
-                    {/* Menu azioni */}
                     {isOrdineFuturo && (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -149,6 +166,7 @@ export const SchedaOrdine = ({
                     )}
                 </div>
             </CardContent>
+
             {dialogoEliminaAperto && (
                 <dialog
                     open
