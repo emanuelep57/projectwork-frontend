@@ -1,12 +1,12 @@
 import {AggiungiBigliettiResponse, Ordine} from '@/types/ordine';
 
-const BASE_URL = 'http://localhost:5000/api/ordini';
+const URL_BASE = `${import.meta.env.VITE_API_URL}/ordini`;
 
 export const ordineAPI = {
 
     //funzione che effettua il fetch degli ordini dell'utente
     async fetchOrdini(): Promise<Ordine[]> {
-        const response = await fetch(`${BASE_URL}`, {
+        const response = await fetch(`${URL_BASE}`, {
             credentials: 'include'
         });
 
@@ -20,7 +20,7 @@ export const ordineAPI = {
 
     //funzione che elimina una prenotazione / ordine
     async eliminaOrdine(orderId: number): Promise<void> {
-        const response = await fetch(`${BASE_URL}/${orderId}`, {
+        const response = await fetch(`${URL_BASE}/${orderId}`, {
             method: 'DELETE',
             credentials: 'include'
         });
@@ -31,7 +31,7 @@ export const ordineAPI = {
     },
 
     async rimuoviPosto(ordineId: number, idPosto: number): Promise<void> {
-        const response = await fetch(`${BASE_URL}/${ordineId}/rimuovi-posto`, {
+        const response = await fetch(`${URL_BASE}/${ordineId}/rimuovi-posto`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export const ordineAPI = {
         nome_ospite?: string,
         cognome_ospite?: string
     }[]): Promise<AggiungiBigliettiResponse> {
-        const response = await fetch(`${BASE_URL}/${ordineId}/aggiungi-posto`, {
+        const response = await fetch(`${URL_BASE}/${ordineId}/aggiungi-posto`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

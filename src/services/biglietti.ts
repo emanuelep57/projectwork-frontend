@@ -1,4 +1,4 @@
-const URL_BASE = 'http://localhost:5000/api/biglietti'; // Base URL per le chiamate API relative ai biglietti
+const URL_BASE = `${import.meta.env.VITE_API_URL}/biglietti`; // Base URL per le chiamate API relative ai biglietti
 
 export const bigliettoAPI = {
     /* Funzione per acquistare i biglietti per una specifica proiezione.
