@@ -10,6 +10,7 @@ import { Posto } from '@/types/posto';
 import { ModalSelezionePosti } from './ModalSelezionePosti';
 import Checkout from '@/components/acquisto/Checkout';
 import { ordineAPI } from "@/services/ordini";
+import { postoAPI } from "@/services/posti";
 import { toast } from '@/hooks/use-toast';
 
 //Il codice è troppo lungo qui, me ne rendo conto scusate in anticipo
@@ -33,7 +34,6 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
     const [postiOccupati, setPostiOccupati] = useState<Posto[]>([]);
     const [postiSelezionati, setPostiSelezionati] = useState<Posto[]>([]);
     const [dettagliOspiti, setDettagliOspiti] = useState<{ [key: string]: { nome: string, cognome: string } }>({});
-
 
     useEffect(() => {
         setIsMainDialogOpen(isOpen);
@@ -68,12 +68,8 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
             if (isModalPostiOpen && ordine) {
                 try {
                     const [disponibili, occupati] = await Promise.all([
-                        fetch(`http://localhost:5000/api/posti/${ordine.proiezione.id}`, {
-                            credentials: 'include'
-                        }).then(res => res.json()),
-                        fetch(`http://localhost:5000/api/posti/occupati/${ordine.proiezione.id}`, {
-                            credentials: 'include'
-                        }).then(res => res.json())
+                        postoAPI.fetchPosti(ordine.proiezione.id),
+                        postoAPI.fetchPostiOccupati(ordine.proiezione.id)
                     ]);
 
                     setPostiDisponibili(disponibili);
