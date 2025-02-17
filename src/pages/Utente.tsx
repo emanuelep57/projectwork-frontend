@@ -11,9 +11,12 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import {toast} from '@/hooks/use-toast';
 import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer";
+import { proiezioneAPI } from '@/services/proiezioni';
+import { postoAPI } from '@/services/posti';
+import { ordineAPI } from '@/services/ordini';
 
 const PaginaBigliettiUtente = () => {
-    const {ordiniFuturi, ordiniPassati, inCaricamento, errore, fetchOrdini, eliminaOrdine} = useOrdini();
+    const {ordiniFuturi, ordiniPassati, inCaricamento, errore, fetchOrdini} = useOrdini();
 
     // Stati per la gestione dell'ordine
     const [ordineSelezionato, setOrdineSelezionato] = useState<Ordine | null>(null);
@@ -36,21 +39,12 @@ const PaginaBigliettiUtente = () => {
      */
     const recuperaProiezioniDisponibili = async (ordine: Ordine) => {
         try {
-            const risposta = await fetch(
-                `http://localhost:5000/api/proiezioni?film_id=${ordine.proiezione.film_id}`,
-                { credentials: 'include' }
-            );
-
-            if (!risposta.ok) {
-                throw new Error('Impossibile recuperare le proiezioni');
-            }
-
-            const dati = await risposta.json();
-            setProiezioniDisponibili(dati);
+            const proiezioni = await proiezioneAPI.fetchProiezioni(ordine.proiezione.film_id);
+            setProiezioniDisponibili(proiezioni);
         } catch (error) {
             toast({
                 title: "Errore",
-                description: "Impossibile caricare le proiezioni disponibili"+error,
+                description: "Impossibile caricare le proiezioni disponibili: " + error,
                 variant: "destructive"
             });
         }
@@ -58,20 +52,16 @@ const PaginaBigliettiUtente = () => {
 
     const gestisciEliminaOrdine = async (id: number) => {
         try {
-            // Chiama la funzione di eliminazione
-            await eliminaOrdine(id);
-            // Aggiorna i dati
+            await ordineAPI.eliminaOrdine(id);
             await fetchOrdini();
-            // Mostra un toast di successo
             toast({
                 title: "Successo",
                 description: "Ordine eliminato con successo"
             });
         } catch (error) {
-            // Gestisci l'errore
             toast({
-                title: "Errore" + error,
-                description: "Impossibile eliminare l'ordine",
+                title: "Errore",
+                description: "Impossibile eliminare l'ordine: " + error,
                 variant: "destructive"
             });
         }
@@ -83,31 +73,22 @@ const PaginaBigliettiUtente = () => {
     const recuperaPostiDisponibili = async (idProiezione: number) => {
         try {
             const [rispostaPosti, rispostaOccupati] = await Promise.all([
-                fetch(`http://localhost:5000/api/posti/${idProiezione}`, {
-                    credentials: 'include'
-                }),
-                fetch(`http://localhost:5000/api/posti/occupati/${idProiezione}`, {
-                    credentials: 'include'
-                })
+                postoAPI.fetchPosti(idProiezione),
+                postoAPI.fetchPostiOccupati(idProiezione)
             ]);
 
-            if (!rispostaPosti.ok || !rispostaOccupati.ok) {
-                throw new Error('Impossibile recuperare i posti');
-            }
-
-            const datiPosti = await rispostaPosti.json();
-            const datiOccupati = await rispostaOccupati.json();
-
-            setPostiDisponibili(datiPosti);
-            setPostiOccupati(datiOccupati);
-        } catch {
+            setPostiDisponibili(rispostaPosti);
+            // I dati occupati vengono già convertiti nel tipo corretto dall'API
+            setPostiOccupati(rispostaOccupati);
+        } catch (error) {
             toast({
                 title: "Errore",
-                description: "Impossibile caricare i posti disponibili",
+                description: "Impossibile caricare i posti disponibili: " + error,
                 variant: "destructive"
             });
         }
     };
+
 
     /**
      * Gestisce l'apertura della modale di modifica ordine
@@ -196,8 +177,10 @@ const PaginaBigliettiUtente = () => {
                     <ModificaOrdine
                         ordine={ordineSelezionato}
                         isOpen={modalModificaAperta}
-                        onClose={() => {setModalModificaAperta(false);
-                                               setOrdineSelezionato(null) }}
+                        onClose={() => {
+                            setModalModificaAperta(false);
+                            setOrdineSelezionato(null)
+                        }}
                         onSuccess={gestisciSuccessoModifica}
                     />
                 )}
