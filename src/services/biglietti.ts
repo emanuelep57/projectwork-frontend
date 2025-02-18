@@ -19,7 +19,7 @@ export const bigliettoAPI = {
             nome_ospite?: string;
             cognome_ospite?: string;
         }>
-    ): Promise<{ ticket_ids: number[]; pdf_urls: string[] }> {
+    ): Promise<{ id_biglietti: number[]; pdf_urls: string[] }> {
         const response = await fetch(`${URL_BASE}/acquisto`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
