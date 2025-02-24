@@ -1,11 +1,11 @@
 import { IconaPosto } from './IconaPosto';
-import React from "react";
+
 
 //legenda dei posti dova mostra che il posto è grigio chiaro se libero
 //grigio scuro se occupato
 //arancione se selezionato
 
-export const LegendaPosti: React.FC = () => (
+export const LegendaPosti = () => (
     <div className="flex flex-wrap justify-center gap-4 mt-8">
         <div className="flex items-center gap-2">
             <div className="transform scale-75">

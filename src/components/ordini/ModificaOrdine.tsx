@@ -16,20 +16,22 @@ import { toast } from '@/hooks/use-toast';
 //Il codice è troppo lungo qui, me ne rendo conto scusate in anticipo
 type Step = 'selezione-azione' | 'selezione-posti' | 'dettagli-ospiti' | 'checkout';
 
+// Componente principale per la modifica di un ordine esistente
+// Permette di aggiungere o rimuovere posti da un ordine
 export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaOrdineProps) => {
-    // Base states
+    // Stati base per gestire il flusso della modifica
     const [step, setStep] = useState<Step>('selezione-azione');
     const [azione, setAzione] = useState<'aggiungi' | 'rimuovi' | null>(null);
     const [numeroPostiDaAggiungere, setNumeroPostiDaAggiungere] = useState<number>(1);
     const [postoDaRimuovere, setPostoDaRimuovere] = useState<number | null>(null);
     const [errore, setErrore] = useState<string | null>(null);
 
-    // Modal states with separate open states
+    // Stati per la gestione dei modal
     const [isMainDialogOpen, setIsMainDialogOpen] = useState(false);
     const [isModalPostiOpen, setIsModalPostiOpen] = useState(false);
     const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
-    // Data states
+    // Stati per la gestione dei dati dei posti
     const [postiDisponibili, setPostiDisponibili] = useState<Posto[]>([]);
     const [postiOccupati, setPostiOccupati] = useState<Posto[]>([]);
     const [postiSelezionati, setPostiSelezionati] = useState<Posto[]>([]);
@@ -39,7 +41,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
         setIsMainDialogOpen(isOpen);
     }, [isOpen]);
 
-    // Resetta tutti gli stati
+    // Resetta tutti gli stati alla chiusura
     const resetStates = () => {
         setStep('selezione-azione');
         setAzione(null);
@@ -54,15 +56,16 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
         setDettagliOspiti({});
     };
 
-    // chiusura del modal
+    // Gestisce la chiusura del modal con animazione
     const handleClose = () => {
         setIsMainDialogOpen(false);
         setTimeout(() => {
             resetStates();
             onClose();
-        }, 200); // Chiusura del modal con timeout per garantire l'animazione
+        }, 200);
     };
 
+    // Carica i posti disponibili e occupati quando si apre il modal di selezione
     useEffect(() => {
         const fetchPosti = async () => {
             if (isModalPostiOpen && ordine) {
@@ -84,6 +87,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
         fetchPosti();
     }, [isModalPostiOpen, ordine]);
 
+    // Gestisce il cambio di azione (aggiunta/rimozione posti)
     const handleAzioneChange = (value: 'aggiungi' | 'rimuovi') => {
         setAzione(value);
         setErrore(null);
@@ -94,6 +98,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
         setStep('selezione-azione');
     };
 
+    // Gestisce la rimozione di un posto dall'ordine
     const handleRimuoviPosto = async () => {
         if (!postoDaRimuovere) return;
 
@@ -110,6 +115,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
         }
     };
 
+    // Gestisce la selezione/deselezione dei posti
     const handleTogglePosto = (idPosto: number) => {
         const posto = postiDisponibili.find(p => p.id === idPosto);
         if (!posto) return;
@@ -125,6 +131,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
         });
     };
 
+    // Verifica e conferma la selezione dei posti
     const handleConfermaSelezionePosti = () => {
         if (postiSelezionati.length === numeroPostiDaAggiungere) {
             setIsModalPostiOpen(false);
@@ -134,6 +141,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
         }
     };
 
+    // Aggiorna i dettagli degli ospiti per ogni posto
     const handleAggiornaDettagliOspite = (posto: Posto, campo: 'nome' | 'cognome', valore: string) => {
         const etichetta = `${posto.fila}${posto.numero}`;
         setDettagliOspiti(prev => ({
@@ -145,6 +153,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
         }));
     };
 
+    // Verifica e conferma i dettagli degli ospiti prima del checkout
     const handleConfermaDettagliOspiti = () => {
         const tuttiDettagliInseriti = postiSelezionati.every(posto => {
             const dettagli = dettagliOspiti[`${posto.fila}${posto.numero}`];
@@ -159,6 +168,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
         }
     };
 
+    // Gestisce il successo del checkout
     const handleCheckoutSuccess = async () => {
         try {
             toast({
@@ -172,6 +182,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
         }
     };
 
+    // Renderizza il form per i dettagli degli ospiti
     const renderDettagliOspiti = () => (
         <div className="space-y-4">
             <h3 className="text-lg font-semibold">Dettagli Ospiti</h3>
@@ -225,6 +236,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
         </div>
     );
 
+    // Layout principale del componente
     return (
         <>
             <Dialog open={isMainDialogOpen} onOpenChange={(open) => {
@@ -276,7 +288,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
                                     </Button>
                                 </div>
                             )}
-
+                            {/*rimuove il posto selezionato*/}
                             {azione === 'rimuovi' && (
                                 <div>
                                     <Label>Seleziona posto da rimuovere</Label>
@@ -313,6 +325,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
                 </DialogContent>
             </Dialog>
 
+            {/* Modal per la selezione dei posti */}
             {isModalPostiOpen && (
                 <ModalSelezionePosti
                     isAperto={isModalPostiOpen}
@@ -333,6 +346,7 @@ export const ModificaOrdine = ({ ordine, isOpen, onClose, onSuccess }: ModificaO
                 />
             )}
 
+            {/* Modal di checkout per finalizzare l'aggiunta dei posti */}
             {isCheckoutOpen && (
                 <Checkout
                     aperto={isCheckoutOpen}

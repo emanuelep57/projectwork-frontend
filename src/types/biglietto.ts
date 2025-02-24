@@ -11,8 +11,7 @@ export interface Biglietto {
     cognome_titolare?: string;
 }
 
-// First, let's update the BigliettoOrdine interface in ordine.ts
 export interface BigliettoOrdine {
     id_biglietto: number;
-    posti: PostoUtente[]; // Change this from Posto[] to PostoUtente[]
+    posti: PostoUtente[];
 }

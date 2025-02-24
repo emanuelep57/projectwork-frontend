@@ -49,7 +49,7 @@ export const useAutenticazione = (onSuccess: () => void, onOpenChange: (open: bo
                 email: data.email,
                 password: data.password
             });
-            showSuccessToast("Account created successfully!");
+            showSuccessToast("Account creato con successo!");
             onSuccess?.();
             onOpenChange?.(false);
         } catch (error) {

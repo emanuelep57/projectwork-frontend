@@ -11,7 +11,6 @@ export interface Film extends base {
     descrizione?: string
 }
 
-// Changed to only require films array
 export interface HeroHomepageProps {
     films: Film[]
 }

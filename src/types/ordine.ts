@@ -1,14 +1,12 @@
 import {Posto, PostoSelezionato} from "@/types/posto.ts";
 import {Proiezione, ProiezioneTitolo} from "@/types/proiezione.ts";
 
-// Common interface for all order types
 interface BaseOrdine {
     id: number;
     data_acquisto: string;
     pdf_url?: string;
 }
 
-// Biglietto interfaces
 export interface BigliettoBase {
     id_biglietto: number;
     posti: Posto[];
@@ -26,7 +24,7 @@ export interface Biglietto extends BigliettoBase {
     pdf_url?: string;
 }
 
-// Order interfaces
+
 export interface Ordine extends BaseOrdine {
     proiezione: {
         id: number;
@@ -45,9 +43,8 @@ export interface OrdineUtente extends BaseOrdine {
     cognome_titolare?: string;
 }
 
-// Props interfaces
 export interface SchedaOrdineProps {
-    ordine: Ordine; // Changed from OrdineUtente to Ordine
+    ordine: Ordine;
     isOrdineFuturo: boolean;
     onModificaPosti: (ordine: Ordine) => void;
     onModificaOrdine: (ordine: Ordine) => void;
@@ -67,7 +64,6 @@ export interface ModalSelezionePostiProps {
     isCambioProiezione?: boolean;
 }
 
-// Rest of the interfaces remain the same
 export interface RiepilogoOrdineProps {
     vistaMobile?: boolean;
     postiSelezionati: PostoSelezionato[];

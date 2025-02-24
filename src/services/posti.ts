@@ -6,7 +6,8 @@ export const postoAPI = {
     async fetchPosti(IdProiezione: number): Promise<Posto[]> {
         const response = await fetch(`${URL_BASE}/${IdProiezione}`);
         if (!response.ok) {
-            throw new Error(`Errore durante il caricamento dei posti ${response.status} ${response.statusText}`);
+            throw new Error(`Errore durante il caricamento dei posti 
+            ${response.status} ${response.statusText}`);
         }
         return response.json();
     },

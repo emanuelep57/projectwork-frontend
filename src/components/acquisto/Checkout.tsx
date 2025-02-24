@@ -12,6 +12,9 @@ import {ordineAPI} from "@/services/ordini";
 import {useAuth} from "@/context/AuthContext";
 import {CheckoutSheetProps} from "@/types/acquisto.ts";
 
+// Componente per gestire l'acquisto dei biglietti e creare un ordine
+// oppure nel caso l'utente stia modificando l'ordine e aggiungendo
+// biglietti, anche la modifica di un ordine esistente
 const Checkout = ({
                       aperto,
                       onStatoChange,
@@ -24,6 +27,7 @@ const Checkout = ({
                       idOrdineEsistente
                   }: CheckoutSheetProps) => {
 
+    // Stati per gestire il processo
     const [processando, setProcessando] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [dataScadenza, setDataScadenza] = useState('');
@@ -31,9 +35,11 @@ const Checkout = ({
     const {toast} = useToast();
     const {utente} = useAuth();
 
+    // Questo effetto imposta come nome e cognome quelli dell'utente loggato
+    // per il primo posto che viene acquistato e quindi per il primo biglietto
+    // A meno che non sia il caso in cui stia venendo aggiunto un posto ad un ordine esistente
     useEffect(() => {
         if (postiSelezionati.length > 0 && !isModificaOrdine && utente?.nome && utente?.cognome) {
-            // Solo se NON è una modifica ordine, usa i dati dell'utente loggato
             const firstSeatLabel = postiSelezionati[0].etichetta;
             if (!dettagliOspite[firstSeatLabel]) {
                 dettagliOspite[firstSeatLabel] = {
@@ -42,16 +48,17 @@ const Checkout = ({
                 };
             }
         }
-        // Non facciamo nulla se è una modifica ordine, poiché i dettagli
-        // vengono già gestiti dal componente ModificaOrdine
     }, [postiSelezionati, utente, isModificaOrdine, dettagliOspite]);
 
+    // Gestisce la submission del form di pagamento
+    // Può gestire sia l'aggiunta di biglietti a un ordine esistente che la creazione di un nuovo ordine
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setProcessando(true);
         setError(null);
 
         try {
+            // Logica per la modifica di un ordine esistente
             if (isModificaOrdine && idOrdineEsistente) {
                 const biglietti = postiSelezionati.map(seat => ({
                     id_posto: seat.id,
@@ -67,7 +74,9 @@ const Checkout = ({
                 if (response.pdf_url) {
                     await bigliettoAPI.downloadPdf(response.pdf_url);
                 }
-            } else {
+            }
+            // Logica per la creazione di un nuovo ordine
+            else {
                 const {pdf_urls} = await bigliettoAPI.acquistaBiglietti(
                     idProiezione,
                     postiSelezionati.map(seat => ({
@@ -82,6 +91,7 @@ const Checkout = ({
                 }
             }
 
+            // Mostra un messaggio di successo e chiude il form
             toast({
                 title: "Successo!",
                 description: isModificaOrdine
@@ -105,6 +115,7 @@ const Checkout = ({
                 </SheetHeader>
 
                 <div className="mt-6">
+                    {/* Visualizzazione degli errori */}
                     {error && (
                         <Alert variant="destructive" className="mb-6">
                             <AlertCircle className="h-4 w-4"/>
@@ -113,6 +124,7 @@ const Checkout = ({
                     )}
 
                     <div className="space-y-4 mb-6">
+                        {/* Riepilogo dell'ordine con dettagli dei posti e prezzi */}
                         <div className="p-4 bg-secondary/50 rounded-lg space-y-2">
                             <div className="flex justify-between text-sm">
                                 <span className="text-muted-foreground">Posti selezionati </span>
@@ -129,6 +141,7 @@ const Checkout = ({
                                 <span>€ {(postiSelezionati.length * costo)}</span>
                             </div>
 
+                            {/* Dettagli dei posti con nomi degli ospiti */}
                             <div className="mt-6">
                                 <h3 className="text-md font-semibold border-b border-border pb-4">Riepilogo Posti:</h3>
                                 {postiSelezionati.map((seat, index) => (
@@ -159,6 +172,7 @@ const Checkout = ({
                             </div>
                         </div>
 
+                        {/* Form per i dettagli della carta di credito */}
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-2">
                                 <Label htmlFor="cardNumber">Numero della carta</Label>

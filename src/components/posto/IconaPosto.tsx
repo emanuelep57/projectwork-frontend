@@ -1,15 +1,10 @@
-import { IconaPostoProps } from '@/types/posto.ts';
-import React from "react";
-
-
-
 //l'icona (la path dell'svg) è stata generata grazie all'ai
 // i colori sono:
 //grigio chiaro se libero
 //grigio scuro se occupato
 //arancione se selezionato
 
-export const IconaPosto: React.FC<IconaPostoProps> = ({ selezionato = false, occupato = false }) => (
+export const IconaPosto = ({ selezionato = false, occupato = false }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 20"

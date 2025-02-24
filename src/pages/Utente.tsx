@@ -15,28 +15,31 @@ import { proiezioneAPI } from '@/services/proiezioni';
 import { postoAPI } from '@/services/posti';
 import { ordineAPI } from '@/services/ordini';
 
+/*
+ * Pagina per la gestione dei biglietti dell'utente.
+ * Permette di visualizzare, modificare ed eliminare gli ordini
+ * per spettacoli futuri e di visualizzare quelli passati.
+ */
 const PaginaBigliettiUtente = () => {
     const {ordiniFuturi, ordiniPassati, inCaricamento, errore, fetchOrdini} = useOrdini();
 
-    // Stati per la gestione dell'ordine
+    // Stati per la gestione dell'ordine corrente
     const [ordineSelezionato, setOrdineSelezionato] = useState<Ordine | null>(null);
     const [modalModificaAperta, setModalModificaAperta] = useState(false);
     const [proiezioniDisponibili, setProiezioniDisponibili] = useState<Proiezione[]>([]);
     const [proiezioneTemporanea, setProiezioneTemporanea] = useState<string>("");
 
-    // Stati per la gestione dei posti
+    // Stati per la gestione della selezione dei posti
     const [postiDisponibili, setPostiDisponibili] = useState<Posto[]>([]);
     const [postiOccupati, setPostiOccupati] = useState<Posto[]>([]);
     const [postiSelezionati, setPostiSelezionati] = useState<number[]>([]);
 
-    // Stati per il controllo dei dialoghi
+    // Stati per il controllo dei modal
     const [dialogoProiezioneAperto, setDialogoProiezioneAperto] = useState(false);
     const [dialogoPostiAperto, setDialogoPostiAperto] = useState(false);
     const [erroreSelezionePosti, setErroreSelezionePosti] = useState<string | null>(null);
 
-    /**
-     * Recupera le proiezioni disponibili per un film
-     */
+    //Recupera le proiezioni disponibili per un film (serve per la modifica)
     const recuperaProiezioniDisponibili = async (ordine: Ordine) => {
         try {
             const proiezioni = await proiezioneAPI.fetchProiezioni(ordine.proiezione.film_id);
@@ -50,6 +53,7 @@ const PaginaBigliettiUtente = () => {
         }
     };
 
+    //Gestisce l'eliminazione dell'ordine
     const gestisciEliminaOrdine = async (id: number) => {
         try {
             await ordineAPI.eliminaOrdine(id);
@@ -67,10 +71,8 @@ const PaginaBigliettiUtente = () => {
         }
     };
 
-    /**
-     * Recupera i posti disponibili e occupati per una proiezione
-     */
-    const recuperaPostiDisponibili = async (idProiezione: number) => {
+    //Recupera sia i posti disponibili che quelli occupati per una proiezione
+    const recuperaPosti = async (idProiezione: number) => {
         try {
             const [rispostaPosti, rispostaOccupati] = await Promise.all([
                 postoAPI.fetchPosti(idProiezione),
@@ -78,7 +80,6 @@ const PaginaBigliettiUtente = () => {
             ]);
 
             setPostiDisponibili(rispostaPosti);
-            // I dati occupati vengono già convertiti nel tipo corretto dall'API
             setPostiOccupati(rispostaOccupati);
         } catch (error) {
             toast({
@@ -89,18 +90,15 @@ const PaginaBigliettiUtente = () => {
         }
     };
 
-
-    /**
-     * Gestisce l'apertura della modale di modifica ordine
-     */
+    //Apre il modal di modifica e imposta l'ordine selezionato
     const gestisciModificaOrdine = async (ordine: Ordine) => {
         setOrdineSelezionato(ordine);
         setModalModificaAperta(true);
     };
 
-    /**
-     * Gestisce il successo della modifica dell'ordine
-     */
+
+     //Gestisce il completamento con successo della modifica dell'ordine
+     //aggiornando i dati e chiudendo il modal
     const gestisciSuccessoModifica = async () => {
         await fetchOrdini();
         setModalModificaAperta(false);
@@ -111,9 +109,7 @@ const PaginaBigliettiUtente = () => {
         });
     };
 
-    /**
-     * Gestisce la modifica dei posti per un cambio proiezione
-     */
+    //gestisce la modifica recuperando le proiezioni disponibili e aprendo il modal di modifica
     const gestisciModificaProiezione = async (ordine: Ordine) => {
         setOrdineSelezionato(ordine);
         setProiezioneTemporanea("");
@@ -122,31 +118,29 @@ const PaginaBigliettiUtente = () => {
         setDialogoProiezioneAperto(true);
     };
 
-    /**
-     * Gestisce la modifica dei soli posti
-     */
+    //recupera i posti e apre il modal di selezione posti
     const gestisciModificaPosti = async (ordine: Ordine) => {
         setOrdineSelezionato(ordine);
         setErroreSelezionePosti(null);
-        await recuperaPostiDisponibili(ordine.proiezione.id);
+        await recuperaPosti(ordine.proiezione.id);
         setPostiSelezionati([]);
         setDialogoPostiAperto(true);
     };
 
-    /**
-     * Conferma il cambio proiezione e procede alla selezione dei posti
-     */
+    //se cambi proiezione deve anche controllare se gli stessi posti esistono per l'altra data
     const gestisciConfermaProiezione = async () => {
         if (!ordineSelezionato || !proiezioneTemporanea) return;
 
-        await recuperaPostiDisponibili(parseInt(proiezioneTemporanea));
+        await recuperaPosti(parseInt(proiezioneTemporanea));
         setDialogoProiezioneAperto(false);
         setPostiSelezionati([]);
         setErroreSelezionePosti(null);
         setDialogoPostiAperto(true);
     };
 
-    // Gestione stati di caricamento e errore
+    // Il resto del componente rimane invariato poiché la logica di rendering
+    // è autoesplicativa grazie ai nomi dei componenti e delle prop
+
     if (inCaricamento) {
         return (
             <div className="container mx-auto p-6 text-center">
@@ -167,12 +161,13 @@ const PaginaBigliettiUtente = () => {
     }
 
     return (
+        // Layout principale con header e footer
         <div className="min-h-screen flex flex-col">
             <Header/>
             <div className="flex-1 container mx-auto p-6">
                 <h1 className="text-3xl font-bold mb-6">I Miei Biglietti</h1>
 
-                {/* Modal per la modifica dell'ordine (aggiunta/rimozione posti) */}
+                {/* Modal per la modifica dell'ordine: permette di aggiungere o rimuovere posti */}
                 {ordineSelezionato && (
                     <ModificaOrdine
                         ordine={ordineSelezionato}
@@ -185,7 +180,7 @@ const PaginaBigliettiUtente = () => {
                     />
                 )}
 
-                {/* Modal per il cambio proiezione */}
+                {/* Modal per il cambio della proiezione: permette di selezionare una nuova data/ora */}
                 <ModalModifica
                     isOpen={dialogoProiezioneAperto}
                     onClose={() => setDialogoProiezioneAperto(false)}
@@ -196,7 +191,7 @@ const PaginaBigliettiUtente = () => {
                     onConferma={gestisciConfermaProiezione}
                 />
 
-                {/* Modal per la selezione dei posti */}
+                {/* Modal per la selezione dei posti: visualizza la griglia dei posti disponibili */}
                 <ModalSelezionePosti
                     isAperto={dialogoPostiAperto}
                     onChiudi={() => setDialogoPostiAperto(false)}
@@ -215,18 +210,21 @@ const PaginaBigliettiUtente = () => {
                     onConferma={gestisciModificaPosti}
                 />
 
+                {/* tab per separare gli ordini futuri da quelli passati */}
                 <Tabs defaultValue="future">
                     <TabsList className="grid w-full grid-cols-2 mb-4">
                         <TabsTrigger value="future">Spettacoli Futuri</TabsTrigger>
                         <TabsTrigger value="past">Spettacoli Passati</TabsTrigger>
                     </TabsList>
 
+                    {/* tab ordini futuri */}
                     <TabsContent value="future">
                         {ordiniFuturi.length === 0 ? (
                             <p className="text-center text-muted-foreground">
                                 Nessuno spettacolo futuro
                             </p>
                         ) : (
+                            // Mappa degli ordini futuri, ciascuno visualizzato in una SchedaOrdine
                             ordiniFuturi.map(ordine => (
                                 <SchedaOrdine
                                     key={ordine.id}
@@ -240,12 +238,14 @@ const PaginaBigliettiUtente = () => {
                         )}
                     </TabsContent>
 
+                    {/* tab ordini passati */}
                     <TabsContent value="past">
                         {ordiniPassati.length === 0 ? (
                             <p className="text-center text-muted-foreground">
                                 Nessuno spettacolo passato
                             </p>
                         ) : (
+                            // Mappa degli ordini passati, ciascuno visualizzato in una SchedaOrdine
                             ordiniPassati.map(ordine => (
                                 <SchedaOrdine
                                     key={ordine.id}

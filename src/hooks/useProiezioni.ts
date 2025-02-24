@@ -1,4 +1,3 @@
-// Importazione delle dipendenze necessarie
 import { useState, useCallback, useRef } from 'react'
 import {proiezioneAPI} from "@/services/proiezioni.ts";
 import {raggruppaDate} from "@/utils/utilsDate.ts";

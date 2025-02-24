@@ -14,16 +14,19 @@ import AuthModal from "@/components/autenticazione/ModalAutenticazione.tsx";
 import Checkout from "@/components/acquisto/Checkout.tsx";
 import LegendaPosti from "@/components/posto/LegendaPosti.tsx";
 
+// Pagina che gestisce la selezione dei posti, l'autenticazione e il processo di checkout
 const Prenota = () => {
     const { autenticato } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+
+    // Destrutturazione dei dati della proiezione passati tramite state
     const state = location.state as {
         titoloFilm: string;
         data_ora: string;
         filmId: string;
         proiezioneId: number;
-        costo : number;
+        costo: number;
         sala: string;
     };
 
@@ -31,8 +34,11 @@ const Prenota = () => {
     const [showCheckout, setShowCheckout] = useState(false);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [isProcessing] = useState(false);
+
+    // Stato per memorizzare i dettagli degli ospiti per i posti selezionati
     const [guestDetails, setGuestDetails] = useState<{[key: string]: {nome: string, cognome: string}}>({});
 
+    // Hook personalizzato per la gestione dei posti
     const {
         postiOccupati,
         postiSelezionati,
@@ -41,10 +47,12 @@ const Prenota = () => {
         gestisciSelezionePosto
     } = useSeats(state?.proiezioneId);
 
+    // Configurazione del layout della sala
     const rows = ['A', 'B', 'C', 'D', 'E'];
     const seatsPerRow = 12;
 
-    //quando l'utente vuole aprire lo sheet del checkout deve essere autenticato, altrimenti si apre il modal che chiede di fare il login
+
+    // Verifica l'autenticazione dell'utente prima di procedere al checkout
     const handleCheckoutClick = (details?: {[key: string]: {nome: string, cognome: string}}) => {
         if (!autenticato) {
             setShowLoginModal(true);
@@ -58,14 +66,17 @@ const Prenota = () => {
         setShowCheckout(true);
     };
 
+    // Gestione degli stati di caricamento ed errore
     if (caricamento) return <Skeleton className="h-screen w-full" />;
     if (errore) return <div className="text-destructive p-4">{errore}</div>;
 
     return (
         <div className="min-h-screen bg-background flex">
+            {/* Contenitore principale con layout responsive */}
             <div className="flex-1 flex flex-col">
                 <Header/>
 
+                {/* Informazioni della proiezione */}
                 <MovieInfo
                     titolo={state?.titoloFilm}
                     sala={state?.sala}
@@ -73,7 +84,9 @@ const Prenota = () => {
                 />
 
                 <div className="flex-1 flex flex-col">
+                    {/* Visualizzazione della sala con lo schermo */}
                     <div className="w-full max-w-3xl mx-auto px-4 py-8">
+                        {/* Realizzazione del "componente" che rappresenta lo schermo */}
                         <div className="relative mb-12">
                             <div className="w-full h-1 bg-foreground rounded-full shadow-[0_0_15px_rgba(var(--foreground),0.5)]"/>
                             <div className="w-full h-12 bg-gradient-to-b from-foreground/10 to-transparent"/>
@@ -82,6 +95,7 @@ const Prenota = () => {
                             </p>
                         </div>
 
+                        {/* Griglia dei posti */}
                         <GrigliaPosti
                             file={rows}
                             postiPerFila={seatsPerRow}
@@ -93,6 +107,7 @@ const Prenota = () => {
                         <LegendaPosti />
                     </div>
 
+                    {/* Barra mobile per il checkoutt */}
                     <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border lg:hidden">
                         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                             <SheetTrigger asChild>
@@ -104,6 +119,8 @@ const Prenota = () => {
                                     {isProcessing ? 'Processando...' : `Checkout (${postiSelezionati.length} Posti)`}
                                 </Button>
                             </SheetTrigger>
+
+                            {/* Sheet con riepilogo per vista mobile */}
                             <SheetContent
                                 side="bottom"
                                 className="h-[80vh] bg-background border-t border-border rounded-t-xl"
@@ -124,18 +141,20 @@ const Prenota = () => {
                 </div>
             </div>
 
+            {/* Sidebar di riepilogo (su desktop) */}
             <div className="hidden lg:block w-96 bg-background border-l border-border">
                 <div className="p-6">
                     <Riepilogo
-                        postiSelezionati={postiSelezionati}  // Changed from selectedSeats
-                        onIndietro={() => navigate(-1)}   // Changed from onBack
-                        onConferma={handleCheckoutClick}  // Changed from onCheckout
+                        postiSelezionati={postiSelezionati}
+                        onIndietro={() => navigate(-1)}
+                        onConferma={handleCheckoutClick}
                         isProcessing={isProcessing}
                         costo={state.costo}
                     />
                 </div>
             </div>
 
+            {/* Modal per autenticazione per andare al checkout*/}
             <AuthModal
                 aperto={showLoginModal}
                 onCambioStato={setShowLoginModal}
