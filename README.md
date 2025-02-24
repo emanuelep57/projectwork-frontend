@@ -1,4 +1,4 @@
-# 🎬 Cinema Pegasus - Sistema di Prenotazione Nell'Era Digitale
+# 🎬 Cinema Pegasus - FRONTEND
 
 Il progetto realizzato permette agli utenti di acquistare biglietti per i film in programmazione, visualizzare dettagli sulle proiezioni e gestire i propri ordini.
 Questa repository contiene il codice relativo al layer di presentazione, ovvero il frontend dell'applicazione.
