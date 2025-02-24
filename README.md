@@ -85,4 +85,31 @@ VITE_API_URL=http://localhost:5000/api
 🔲 Implementazione delle funzionalità di Menù (prenotazione cibo) e prenotazione della sala    
 🔲 Implementazione di notifiche per la conferma delle prenotazioni  
 🔲 Implementazione di un sistema di pagamento online  
-🔲 Implementazione delle funzionalità di back office  
+🔲 Implementazione delle funzionalità di back office
+
+
+## 📸 Esempi e Screenshot
+
+### 📄 Esempio di Biglietto
+[Visualizza un biglietto di esempio generato dal sito](public/biglietto.pdf)
+
+### Screenshot delle principali funzionalità dell'applicazione:
+
+### Homepage
+![Homepage](screenshots/Hero.png)
+
+### Sezione orari
+![Orari](screenshots/Orari.png)
+
+### Dettagli Film
+![Dettagli Film](screenshots/Dettagli.png)
+
+### Selezione Posti
+![Selezione Posti](screenshots/Posti.png)
+
+### Checkout
+![Riepilogo Ordine](screenshots/Checkout.png)
+
+### Ordini
+![Ordini](screenshots/Ordini.png)
+
