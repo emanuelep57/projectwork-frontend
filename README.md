@@ -1,50 +1,88 @@
-# React + TypeScript + Vite
+# 🎬 Cinema Pegasus - Sistema di Prenotazione Nell'Era Digitale
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Il progetto realizzato permette agli utenti di acquistare biglietti per i film in programmazione, visualizzare dettagli sulle proiezioni e gestire i propri ordini.
+Questa repository contiene il codice relativo al layer di presentazione, ovvero il frontend dell'applicazione.
 
-Currently, two official plugins are available:
+🔗 **Sito Online**:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Il deploy del sito è avvenuto con successo e lo si può trovare al seguente URL [Cinema Pegasus](https://projectwork-frontend.vercel.app)
 
-## Expanding the ESLint configuration
+## 📌 Tecnologie Utilizzate
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- [React (Vite)](https://vite.dev/guide/)  
+- [ShadCN/ui](https://ui.shadcn.com/)
+- [TailwindCSS](https://tailwindcss.com/)  
 
-- Configure the top-level `parserOptions` property like this:
+## 📁 Struttura del Progetto
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+├── App.tsx
+├── components         # Contiene i componenti UI scritti da me
+│   ├── acquisto
+│   ├── autenticazione
+│   ├── film
+│   │   ├── DettagliFilm
+│   │   └── Homepage
+│   ├── layout
+│   │   ├── Footer.tsx
+│   │   └── Header
+│   ├── ordini
+│   ├── posto
+│   ├── ui            # Componenti UI di ShadCN
+│   └── WorkInProgress.tsx
+├── context           # Contiene il contesto globale di autenticazione
+│   └── AuthContext.tsx
+├── hooks             # Cartella che contiene i custom hooks scritti da me, tranne:
+│   ├── use-mobile.tsx #Hook scritto da ShadCN
+│   └── use-toast.ts  #Hook scritto da ShadCN
+├── lib               # Utility fornite da ShadCN
+│   └── utils.ts
+├── pages             # Pagine principali del sito
+├── services          # Interazioni con il backend
+├── types             # Definizioni interfacce TypeScript
+├── utils             # Funzioni di utilità generiche divise fra più componenti
+└── vite-env.d.ts
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## 🚀 Installazione
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+1. **Clona il repository**  
+   ```bash
+   git clone https://github.com/emanuelep57/projectwork-frontend
+   cd projectwork-frontend
+   ```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+2. **Installa le dipendenze**  
+   ```bash
+   npm install
+   ```
+
+3. **Avvia il progetto**  
+   ```bash
+   npm run dev
+   ```
+
+## 🔑 Configurazione Ambiente
+
+Crea un file `.env` nella root del progetto e aggiungi le seguenti variabili:
+
+```env
+VITE_API_URL=http://localhost:5000/api
 ```
+
+## 📌 Funzionalità
+
+✅ **Autenticazione** (Login, Registrazione, Logout)  
+✅ **Visualizzazione dei film in programmazione**  
+✅ **Visualizzazione dettagli dei film**  
+✅ **Scelta dei posti e pagamento dei biglietti**  
+✅ **Gestione e storico degli ordini**  
+✅ **Download del biglietto in PDF**  
+
+## 🛤️ Roadmap
+
+🔲 Ottimizzazione delle prestazioni del sito  
+🔲 Implementazione delle funzionalità di Menù (prenotazione cibo) e prenotazione della sala    
+🔲 Implementazione di notifiche per la conferma delle prenotazioni  
+🔲 Implementazione di un sistema di pagamento online  
+🔲 Implementazione delle funzionalità di back office  
